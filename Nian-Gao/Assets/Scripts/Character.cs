@@ -15,7 +15,10 @@ public abstract class Character : MonoBehaviour
 {
     //fields
     //Feel free to add more as things come up
-    public int health;
+    public int currentHealth;
+    public int maxHealth;
+    public HealthBar healthBar;
+
     public Vector3 position;
     public int shotDamage;//damage of a character's bullets
     public string shotType;//type of shot they are shooting, thought that having a field like this would make powerups easier
@@ -29,6 +32,9 @@ public abstract class Character : MonoBehaviour
     {
         //sets position
         position = transform.position;
+
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -44,10 +50,14 @@ public abstract class Character : MonoBehaviour
     }
 
     //runs when a character gets hit will a bullet
-    void TakeDamage()
+    //param: damage: the amount of damage to be taken
+    void TakeDamage(int damage)
     {
         //takes however much health, provides some sort of visual, and checks for death?
         //can wait until after sprint 2
+
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
     //player and enemy will have slightly different methods of moving (being controlled or not) so this will be defined elsewhere
