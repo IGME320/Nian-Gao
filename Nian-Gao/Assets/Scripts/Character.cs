@@ -22,25 +22,26 @@ public abstract class Character : MonoBehaviour
     protected string[] shotTypeArray = { "normal", "spread-shot", "speed-shot" };//array of different shot types for ^^
 
     //reference to the bullet prefab
-    public GameObject bullet;
+    public ParticleSystem bullet;
 
     // Start is called before the first frame update
     void Start()
     {
         //sets position
         position = transform.position;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    //you're welcome to change this but i thought it could be helpful to have this here
-    void Shoot()
+    //When called will emit n particles, default of 1
+    protected void Shoot(int n = 1)
     {
-        //I though a switch could work well here, but you do you
+        bullet.Emit(n);
     }
 
     //runs when a character gets hit will a bullet
