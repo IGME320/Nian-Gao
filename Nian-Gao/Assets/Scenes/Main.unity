@@ -345,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958225407154672878, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: lengthInSec
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 958225407154672878, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: playOnAwake
@@ -409,7 +409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958225407154672878, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: InitialModule.maxNumParticles
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 958225407154672878, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size

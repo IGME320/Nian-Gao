@@ -12,10 +12,11 @@ using UnityEngine;
 
 public class Player : Character
 {
+    private bool shooting = true;//Used to toggle shooting on and off
+
     // Start is called before the first frame update
     void Start()
     {
-        //ideally this won't need to be called here
     }
 
     // Update is called once per frame
@@ -24,18 +25,35 @@ public class Player : Character
 
     }
 
-    //An update that occures at a fixed interval
+    //An update that occures at fixed intervals to bypass any frame inconsistancy
     void FixedUpdate()
     {
-        //Checks if the user is holding left click or the space bar
-        if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+        ShootPlayer(1);
+        
+    }
+
+    /// <summary>
+    /// Player Shoot method.
+    /// Shoots n particles, default 1
+    /// </summary>
+    /// <param name="n">number of particles</param>
+    public void ShootPlayer(int n = 1)
+    {
+        //Checks if the user is holding left click or the space bar AND if the player is able to shoot
+        if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && shooting == true)
         {
-            Shoot(1);//Shoots 1 particle
-            //Right now we are limited to only on particle per system because other wise it looks like a beam of particles
-            //rather than individual particles being fire rapidly.
+            bullet.Emit(n);//Emits n number of particles
+            shooting = false;//The player can no longer shoot
+            StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
         }
     }
 
+    //This coroutine will be used to toggle shooting on and off so that more than one particle can be used at one time
+    private IEnumerator ToggleShoot()
+    {
+        yield return new WaitForSeconds(0.25f);//Waits for a short amount of time
+        shooting = true;//lets the player shoot again
+    }
 
     //override from character -> define player movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
