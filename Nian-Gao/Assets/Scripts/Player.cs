@@ -21,7 +21,19 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        //ideally this won't need to be called here
+
+    }
+
+    //An update that occures at a fixed interval
+    void FixedUpdate()
+    {
+        //Checks if the user is holding left click or the space bar
+        if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+        {
+            Shoot(1);//Shoots 1 particle
+            //Right now we are limited to only on particle per system because other wise it looks like a beam of particles
+            //rather than individual particles being fire rapidly.
+        }
     }
 
 
