@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 734548170050476390}
   - component: {fileID: 3501670575711186760}
   - component: {fileID: 439162736312586018}
+  - component: {fileID: 5142406770531078887}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -100,3 +101,24 @@ MonoBehaviour:
   shotDamage: 1
   shotType: normal
   bullet: {fileID: 0}
+--- !u!50 &5142406770531078887
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966329060271459712}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
