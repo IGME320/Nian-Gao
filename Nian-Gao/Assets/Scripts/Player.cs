@@ -12,10 +12,22 @@ using UnityEngine;
 
 public class Player : Character
 {
+
+    public float speed;
+    public float normalDamping;
+
+    private Rigidbody2D rb;
+    private CapsuleCollider2D cc;
+
     // Start is called before the first frame update
     void Start()
     {
         //ideally this won't need to be called here
+        rb = GetComponent<Rigidbody2D>();
+        cc = GetComponent<CapsuleCollider2D>();
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+        
     }
 
     // Update is called once per frame
@@ -24,11 +36,34 @@ public class Player : Character
         //ideally this won't need to be called here
     }
 
+    private void FixedUpdate(){
+        Move();
+    }
+
 
     //override from character -> define player movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
     {
+        //sets the velocity variables
+        float currentSpeedX = rb.velocity.x;
+        float currentSpeedY = rb.velocity.y;
+        //is basic speed
+        currentSpeedX += (speed * Input.GetAxisRaw("Horizontal"));
+        currentSpeedY += (speed * Input.GetAxisRaw("Vertical"));
+        //adds damping
+        currentSpeedX *= Mathf.Pow(1f - normalDamping, Time.deltaTime * 20f);
+        currentSpeedY *= Mathf.Pow(1f - normalDamping, Time.deltaTime * 20f);  
 
+        //stops the object is the speed is really small value
+        if (currentSpeedX < 1 && currentSpeedX > -1 ){
+            currentSpeedX = 0;
+        }
+        if (currentSpeedY < 1 && currentSpeedY > -1 ){
+            currentSpeedY = 0;
+        }
+        
+        //adds speed
+        rb.velocity = new Vector2(currentSpeedX, currentSpeedY);
     }
 
     //override from character -> runs when health is 0
