@@ -18,6 +18,7 @@ public class Player : Character
 
     private Rigidbody2D rb;
     private CapsuleCollider2D cc;
+    private bool shooting = true;//Used to toggle shooting on and off
 
     // Start is called before the first frame update
     void Start()
@@ -33,13 +34,42 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        //ideally this won't need to be called here
+
+    }
+
+    //An update that occures at fixed intervals to bypass any frame inconsistancy
+    void FixedUpdate()
+    {
+        ShootPlayer(1);
+        
     }
 
     private void FixedUpdate(){
         Move();
     }
 
+    /// <summary>
+    /// Player Shoot method.
+    /// Shoots n particles, default 1
+    /// </summary>
+    /// <param name="n">number of particles</param>
+    public void ShootPlayer(int n = 1)
+    {
+        //Checks if the user is holding left click or the space bar AND if the player is able to shoot
+        if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && shooting == true)
+        {
+            bullet.Emit(n);//Emits n number of particles
+            shooting = false;//The player can no longer shoot
+            StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
+        }
+    }
+
+    //This coroutine will be used to toggle shooting on and off so that more than one particle can be used at one time
+    private IEnumerator ToggleShoot()
+    {
+        yield return new WaitForSeconds(0.25f);//Waits for a short amount of time
+        shooting = true;//lets the player shoot again
+    }
 
     //override from character -> define player movement here (if it works better in Character feel free to move/change things)
     protected override void Move()

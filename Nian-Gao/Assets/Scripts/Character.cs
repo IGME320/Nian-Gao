@@ -15,39 +15,48 @@ public abstract class Character : MonoBehaviour
 {
     //fields
     //Feel free to add more as things come up
-    public int health;
+    public int currentHealth;
+    public int maxHealth;
+    public HealthBar healthBar;
+
     public Vector3 position;
     public int shotDamage;//damage of a character's bullets
     public string shotType;//type of shot they are shooting, thought that having a field like this would make powerups easier
     protected string[] shotTypeArray = { "normal", "spread-shot", "speed-shot" };//array of different shot types for ^^
 
     //reference to the bullet prefab
-    public GameObject bullet;
+    public ParticleSystem bullet;
 
     // Start is called before the first frame update
     void Start()
     {
         //sets position
         position = transform.position;
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    //you're welcome to change this but i thought it could be helpful to have this here
-    void Shoot()
+    //When called will emit n particles, default of 1
+    protected void Shoot(int n = 1)
     {
-        //I though a switch could work well here, but you do you
+        bullet.Emit(n);
     }
 
     //runs when a character gets hit will a bullet
-    void TakeDamage()
+    //param: damage: the amount of damage to be taken
+    void TakeDamage(int damage)
     {
         //takes however much health, provides some sort of visual, and checks for death?
         //can wait until after sprint 2
+
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
     //player and enemy will have slightly different methods of moving (being controlled or not) so this will be defined elsewhere
