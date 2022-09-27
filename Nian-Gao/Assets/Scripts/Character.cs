@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -39,7 +40,7 @@ public abstract class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     //When called will emit n particles, default of 1
@@ -57,6 +58,12 @@ public abstract class Character : MonoBehaviour
 
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
+
+        //checks if health is 0 and runs death if it is
+        if (currentHealth == 0)
+        {
+            Die();
+        }
     }
 
     //player and enemy will have slightly different methods of moving (being controlled or not) so this will be defined elsewhere

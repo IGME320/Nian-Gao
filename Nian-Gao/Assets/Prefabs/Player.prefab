@@ -97,7 +97,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9478519bf10118b45a1752299643dddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  currentHealth: 10
+  maxHealth: 10
+  healthBar: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
   shotDamage: 1
   shotType: normal
@@ -199,4 +201,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8326248499054855666, guid: bffcc31108dccea4f8cf7a93a1048183, type: 3}
   m_PrefabInstance: {fileID: 514378970427570313}
   m_PrefabAsset: {fileID: 0}
-
