@@ -41,10 +41,6 @@ public class Player : Character
     void FixedUpdate()
     {
         ShootPlayer(1);
-        
-    }
-
-    private void FixedUpdate(){
         Move();
     }
 

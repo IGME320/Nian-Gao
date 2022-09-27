@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 //current namimg/coding conventions
@@ -11,6 +13,9 @@ using UnityEngine;
 
 public class Enemy : Character
 {
+    //gets the sprite renderer
+    public SpriteRenderer spriteSkin;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +37,17 @@ public class Enemy : Character
     //override from character -> runs when health is 0
     protected override void Die()
     {
-        //should maybe run a death animation or change the color of the sprite and delete it
-        //this can wait till after sprint 2
+        //Fetch the SpriteRenderer from the GameObject
+        //spriteSkin = GetComponent<SpriteRenderer>();
+
+        //Set the GameObject's Color to grey
+        spriteSkin.color = Color.grey;
+
+        //for testing, doesn't run rn tho
+        UnityEngine.Debug.Log("death");
+
+        //removes gameObject after 5 seconds
+        Destroy(gameObject, 5);
+        
     }
 }

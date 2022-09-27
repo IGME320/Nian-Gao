@@ -96,11 +96,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b8b7208674d734f9cf48a731188276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  currentHealth: 10
+  maxHealth: 10
+  healthBar: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
   shotDamage: 1
   shotType: normal
   bullet: {fileID: 0}
+  spriteSkin: {fileID: 3501670575711186760}
 --- !u!50 &5142406770531078887
 Rigidbody2D:
   serializedVersion: 4
