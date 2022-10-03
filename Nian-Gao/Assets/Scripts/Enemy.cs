@@ -35,4 +35,21 @@ public class Enemy : Character
         //should maybe run a death animation or change the color of the sprite and delete it
         //this can wait till after sprint 2
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        print("running");
+        if(other.transform.tag == "Bullet")
+        {
+            print("Hit");
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        print("running");
+        if (other.transform.tag == "Bullet")
+        {
+            print("Hit");
+        }
+    }
 }
