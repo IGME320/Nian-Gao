@@ -11,16 +11,21 @@ using UnityEngine;
 
 public class Enemy : Character
 {
+    //gets the sprite renderer
+    public SpriteRenderer spriteSkin;
+    private Rigidbody2D rb;//The enemy's rigid body
+
     // Start is called before the first frame update
     void Start()
     {
-        //ideally this won't need to be called here
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //ideally this won't need to be called here
+        //transform.position = new Vector2(transform.position.x - .1f, transform.position.y); 
     }
 
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
@@ -36,20 +41,23 @@ public class Enemy : Character
         //this can wait till after sprint 2
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        print("running");
-        if(other.transform.tag == "Bullet")
-        {
-            print("Hit");
-        }
+        //Set the GameObject's Color to grey
+        spriteSkin.color = Color.grey;
+
+        //for testing, doesn't run rn tho
+        UnityEngine.Debug.Log("death");
+
+        //removes gameObject after 5 seconds
+        Destroy(gameObject, 5);
+        
     }
-    private void OnTriggerEnter(Collider other)
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        print("running");
-        if (other.transform.tag == "Bullet")
+        if (collision.transform.tag == "Bullet")//Detects collision with a bullet
         {
-            print("Hit");
+            rb.velocity = new Vector2(0f, 0f);//Sets velocity to zero so this object is not pushed by the bullet
+            Destroy(collision.gameObject);//Destroys the colliding bullet
         }
     }
 }

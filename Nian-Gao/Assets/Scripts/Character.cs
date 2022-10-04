@@ -22,7 +22,7 @@ public abstract class Character : MonoBehaviour
     protected string[] shotTypeArray = { "normal", "spread-shot", "speed-shot" };//array of different shot types for ^^
 
     //reference to the bullet prefab
-    public ParticleSystem bullet;
+    private ParticleSystem bulletEmitter;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +41,7 @@ public abstract class Character : MonoBehaviour
     //When called will emit n particles, default of 1
     protected void Shoot(int n = 1)
     {
-        bullet.Emit(n);
+        bulletEmitter.Emit(n);
     }
 
     //runs when a character gets hit will a bullet
