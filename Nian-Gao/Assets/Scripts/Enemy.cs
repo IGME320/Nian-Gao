@@ -39,7 +39,6 @@ public class Enemy : Character
     {
         //should maybe run a death animation or change the color of the sprite and delete it
         //this can wait till after sprint 2
-    }
 
         //Set the GameObject's Color to grey
         spriteSkin.color = Color.grey;
