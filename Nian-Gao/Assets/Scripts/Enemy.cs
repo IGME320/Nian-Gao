@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 //current namimg/coding conventions
@@ -15,17 +13,19 @@ public class Enemy : Character
 {
     //gets the sprite renderer
     public SpriteRenderer spriteSkin;
+    private Rigidbody2D rb;//The enemy's rigid body
 
     // Start is called before the first frame update
     void Start()
     {
-        //ideally this won't need to be called here
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //ideally this won't need to be called here
+        //transform.position = new Vector2(transform.position.x - .1f, transform.position.y); 
     }
 
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
@@ -37,8 +37,8 @@ public class Enemy : Character
     //override from character -> runs when health is 0
     protected override void Die()
     {
-        //Fetch the SpriteRenderer from the GameObject
-        //spriteSkin = GetComponent<SpriteRenderer>();
+        //should maybe run a death animation or change the color of the sprite and delete it
+        //this can wait till after sprint 2
 
         //Set the GameObject's Color to grey
         spriteSkin.color = Color.grey;
@@ -49,5 +49,14 @@ public class Enemy : Character
         //removes gameObject after 5 seconds
         Destroy(gameObject, 5);
         
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Bullet")//Detects collision with a bullet
+        {
+            rb.velocity = new Vector2(0f, 0f);//Sets velocity to zero so this object is not pushed by the bullet
+            Destroy(collision.gameObject);//Destroys the colliding bullet
+        }
     }
 }
