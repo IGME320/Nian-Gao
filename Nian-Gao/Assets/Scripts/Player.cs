@@ -18,6 +18,8 @@ public class Player : Character
 
     private Rigidbody2D rb;
     private CapsuleCollider2D cc;
+    //gets the sprite renderer
+    public SpriteRenderer spriteSkin;
 
     private bool shooting = true;//Used to toggle shooting on and off
     public GameObject bullet;//The bullet object reference
@@ -97,8 +99,11 @@ public class Player : Character
     //override from character -> runs when health is 0
     protected override void Die()
     {
-        //should maybe run a death animation or change the color of the player sprite and prompt player to play again
-        //this can wait till after sprint 2
+        //Set the GameObject's Color to grey
+        spriteSkin.color = Color.grey;
+
+        //removes gameObject after 1 second
+        Destroy(gameObject, 1);
     }
 
     //changes the player's shot

@@ -24,11 +24,16 @@ public abstract class Character : MonoBehaviour
     //reference to the bullet prefab
     private ParticleSystem bulletEmitter;
 
+    //reference to healthbar
+    public HealthBar healthbar;
+
     // Start is called before the first frame update
     void Start()
     {
         //sets position
         position = transform.position;
+        //sets max health
+        healthbar.SetMaxHealth(health);
 
     }
 
@@ -45,10 +50,18 @@ public abstract class Character : MonoBehaviour
     }
 
     //runs when a character gets hit will a bullet
-    void TakeDamage()
+    protected void TakeDamage()
     {
-        //takes however much health, provides some sort of visual, and checks for death?
-        //can wait until after sprint 2
+        //for now this doesn't use shotDamage and just takes 1 point of health
+        health--;
+        //updates the healthbar
+        healthbar.SetHealth(health);
+        
+        //checks for death
+        if(health <= 0)
+        {
+            Die();
+        }
     }
 
     //player and enemy will have slightly different methods of moving (being controlled or not) so this will be defined elsewhere

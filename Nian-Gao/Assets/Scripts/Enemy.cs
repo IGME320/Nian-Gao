@@ -37,17 +37,11 @@ public class Enemy : Character
     //override from character -> runs when health is 0
     protected override void Die()
     {
-        //should maybe run a death animation or change the color of the sprite and delete it
-        //this can wait till after sprint 2
-
         //Set the GameObject's Color to grey
         spriteSkin.color = Color.grey;
 
-        //for testing, doesn't run rn tho
-        UnityEngine.Debug.Log("death");
-
-        //removes gameObject after 5 seconds
-        Destroy(gameObject, 5);
+        //removes gameObject after 1 second
+        Destroy(gameObject, 1);
         
     }
 
@@ -58,5 +52,6 @@ public class Enemy : Character
             rb.velocity = new Vector2(0f, 0f);//Sets velocity to zero so this object is not pushed by the bullet
             Destroy(collision.gameObject);//Destroys the colliding bullet
         }
+        TakeDamage();
     }
 }
