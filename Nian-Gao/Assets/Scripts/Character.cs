@@ -52,8 +52,8 @@ public abstract class Character : MonoBehaviour
     //runs when a character gets hit will a bullet
     protected void TakeDamage()
     {
-        //for now this doesn't use shotDamage and just takes 1 point of health
-        health--;
+        //for now this doesn't use shotDamage and just takes 10 points of health
+        health-=10;
         //updates the healthbar
         healthbar.SetHealth(health);
         

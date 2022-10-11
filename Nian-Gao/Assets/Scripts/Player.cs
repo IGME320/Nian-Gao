@@ -20,6 +20,8 @@ public class Player : Character
     private CapsuleCollider2D cc;
     //gets the sprite renderer
     public SpriteRenderer spriteSkin;
+    //gets the scene switcher
+    public GameObject switchScene;
 
     private bool shooting = true;//Used to toggle shooting on and off
     public GameObject bullet;//The bullet object reference
@@ -104,6 +106,9 @@ public class Player : Character
 
         //removes gameObject after 1 second
         Destroy(gameObject, 1);
+
+        //switches the scene
+        switchScene.GetComponent<SceneSwitcher>().ChangeScene();
     }
 
     //changes the player's shot
