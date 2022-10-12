@@ -17,6 +17,9 @@ public class Enemy : Character
     private bool shooting = true;
     public GameObject bullet;//The bullet object reference
 
+    //gets the scene switcher
+    public GameObject switchScene;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +58,10 @@ public class Enemy : Character
 
         //removes gameObject after 1 second
         Destroy(gameObject, 1);
-        
+
+        //Goes to win screen
+        switchScene.GetComponent<SceneSwitcher>().Win();
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
