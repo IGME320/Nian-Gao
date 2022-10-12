@@ -148,7 +148,7 @@ MonoBehaviour:
   speed: 3
   normalDamping: 0.1
   spriteSkin: {fileID: 0}
-  SceneSwitcher: {fileID: 6435627043809392688}
+  switchScene: {fileID: 0}
   bullet: {fileID: 0}
   shootDelay: 0
 --- !u!50 &-5534644205557973371
@@ -171,4 +171,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4

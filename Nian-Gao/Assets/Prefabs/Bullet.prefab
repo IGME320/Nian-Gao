@@ -153,3 +153,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedMultiplier: 1
   self: {fileID: 5319640098566905205}
+  direction: 1

@@ -100,7 +100,9 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   shotDamage: 1
   shotType: normal
+  healthbar: {fileID: 0}
   spriteSkin: {fileID: 3501670575711186760}
+  bullet: {fileID: 945144569455500405, guid: 1b62959fbe3a51e40afaadd9d9319301, type: 3}
 --- !u!50 &5142406770531078887
 Rigidbody2D:
   serializedVersion: 4
