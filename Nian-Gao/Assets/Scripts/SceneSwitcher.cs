@@ -12,27 +12,38 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
+    Scene currentScene;
+
+    private void Start()
+    {
+        currentScene = SceneManager.GetActiveScene();
+    }
+
     //switches the scene based on what the current scene is
     public void ChangeScene()
     {
-        //gets current scene
-        Scene currentScene = SceneManager.GetActiveScene();
-        //loads restart if main is open
-        if (currentScene.buildIndex == 0)
+
+        if (Input.anyKey && (currentScene.name == "Start_Menu" || currentScene.name == "Restart" || currentScene.name == "Win_Restart"))//If any button is pressed and in either the start or restart menus
         {
-            SceneManager.LoadScene(1, LoadSceneMode.Single);
-        }
-        //loads main if restart is open
-        else
-        {
-            SceneManager.LoadScene(0, LoadSceneMode.Single);
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);//Loads main scene
         }
     }
 
-    //runs change scene when the restart button is pressed
-    public void OnButtonPress()
+    //Loads the restart scene when the player dies
+    public void Restart()
     {
-        ChangeScene();
+        SceneManager.LoadScene("Restart", LoadSceneMode.Single);//loads restart scene when called
+    }
+
+    public void Win()
+    {
+        SceneManager.LoadScene("Win_Restart", LoadSceneMode.Single);//loads Win scene when called
+    }
+
+    //runs every frame
+    public void Update()
+    {
+        ChangeScene();//calls the change scene function
     }
 }
 

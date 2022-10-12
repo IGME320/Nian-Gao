@@ -14,6 +14,11 @@ public class Enemy : Character
     //gets the sprite renderer
     public SpriteRenderer spriteSkin;
     private Rigidbody2D rb;//The enemy's rigid body
+    private bool shooting = true;
+    public GameObject bullet;//The bullet object reference
+
+    //gets the scene switcher
+    public GameObject switchScene;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +31,17 @@ public class Enemy : Character
     {
         //ideally this won't need to be called here
         //transform.position = new Vector2(transform.position.x - .1f, transform.position.y); 
+    }
+
+    //An update that occures at fixed intervals to bypass any frame inconsistancy
+    void FixedUpdate()
+    {
+        if(shooting)
+        {
+            Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+            shooting = false;//The player can no longer shoot
+            StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
+        }
     }
 
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
@@ -42,7 +58,10 @@ public class Enemy : Character
 
         //removes gameObject after 1 second
         Destroy(gameObject, 1);
-        
+
+        //Goes to win screen
+        switchScene.GetComponent<SceneSwitcher>().Win();
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -53,5 +72,12 @@ public class Enemy : Character
             Destroy(collision.gameObject);//Destroys the colliding bullet
         }
         TakeDamage();
+    }
+
+    //This coroutine will be used to toggle shooting on and off so that more than one particle can be used at one time
+    private IEnumerator ToggleShoot()
+    {
+        yield return new WaitForSeconds(1.25f);//Waits for a short amount of time
+        shooting = true;//lets the enemy shoot again
     }
 }

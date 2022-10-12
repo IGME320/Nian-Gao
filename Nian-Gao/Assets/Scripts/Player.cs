@@ -108,7 +108,7 @@ public class Player : Character
         Destroy(gameObject, 1);
 
         //switches the scene
-        switchScene.GetComponent<SceneSwitcher>().ChangeScene();
+        switchScene.GetComponent<SceneSwitcher>().Restart();
     }
 
     //changes the player's shot
