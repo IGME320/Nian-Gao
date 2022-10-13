@@ -123,4 +123,16 @@ public class Player : Character
     {
         //This can wait till after sprint 2
     }
+
+
+    //Checks for bullet collisions
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "EnemyBullet")
+        {
+            TakeDamage();
+            Destroy(collision.gameObject);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
+    }
 }
