@@ -108,7 +108,7 @@ public class Player : Character
         Destroy(gameObject, 1);
 
         //switches the scene
-        switchScene.GetComponent<SceneSwitcher>().ChangeScene();
+        switchScene.GetComponent<SceneSwitcher>().Restart();
     }
 
     //changes the player's shot
@@ -122,5 +122,17 @@ public class Player : Character
     private void Eat()
     {
         //This can wait till after sprint 2
+    }
+
+
+    //Checks for bullet collisions
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "EnemyBullet")
+        {
+            TakeDamage();
+            Destroy(collision.gameObject);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
     }
 }

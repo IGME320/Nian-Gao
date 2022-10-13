@@ -21,8 +21,7 @@ public abstract class Character : MonoBehaviour
     public string shotType;//type of shot they are shooting, thought that having a field like this would make powerups easier
     protected string[] shotTypeArray = { "normal", "spread-shot", "speed-shot" };//array of different shot types for ^^
 
-    //reference to the bullet prefab
-    private ParticleSystem bulletEmitter;
+    
 
     //reference to healthbar
     public HealthBar healthbar;
@@ -41,12 +40,6 @@ public abstract class Character : MonoBehaviour
     void Update()
     {
 
-    }
-
-    //When called will emit n particles, default of 1
-    protected void Shoot(int n = 1)
-    {
-        bulletEmitter.Emit(n);
     }
 
     //runs when a character gets hit will a bullet
