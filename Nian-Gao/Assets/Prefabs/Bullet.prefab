@@ -151,6 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e411073863060dc46b1f0fa4776eecee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 20
+  speedMultiplier: 5
   self: {fileID: 5319640098566905205}
   direction: 1
