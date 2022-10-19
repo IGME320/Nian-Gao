@@ -23,7 +23,9 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = new Vector2(SPEED*speedMultiplier*direction, 0f);//Moves the bullet at a fixed veloccity
+    
+        rb.velocity = new Vector2(SPEED * speedMultiplier,0f);
+        //rb.velocity = new Vector2(SPEED*speedMultiplier*direction, 0f);//Moves the bullet at a fixed veloccity
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
