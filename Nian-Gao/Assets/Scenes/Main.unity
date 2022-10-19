@@ -901,6 +901,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 439162736312586018, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1440764200}
+    - target: {fileID: 439162736312586018, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1986937274}
@@ -1384,6 +1388,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387934649}
   m_CullTransparentMesh: 1
+--- !u!1 &1440764200 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6485877501689357726, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
+  m_PrefabInstance: {fileID: 2119325700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1568536187
 GameObject:
   m_ObjectHideFlags: 0

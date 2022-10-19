@@ -16,6 +16,8 @@ public class Enemy : Character
     private Rigidbody2D rb;//The enemy's rigid body
     private bool shooting = true;
     public GameObject bullet;//The bullet object reference
+    public GameObject player; //player object reference (must be the one in the scene)
+    public float maxSpeed;//fastest enemy can go (thinking 1 or 2 slower than player)
 
     //gets the scene switcher
     public GameObject switchScene;
@@ -42,12 +44,31 @@ public class Enemy : Character
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
         }
+        Move();
     }
 
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
     {
-        //this can wait till after sprint 2
+        //calls seek to follow the player
+        //planning on adding stuff to avoid bullets too
+        rb.velocity = Seek(player.GetComponent<Rigidbody2D>().position);
+    }
+
+    //helper function that steers the enemy towards the player
+    protected Vector2 Seek(Vector2 targetPos)
+    {
+        //calculate our desired velocity
+        //a vector towards target position
+        Vector2 desiredVelocity = targetPos - rb.position;
+
+        //scales to max speed
+        desiredVelocity = desiredVelocity.normalized * maxSpeed;
+
+        //calculate the seek steering force
+        Vector2 seekingForce = desiredVelocity - rb.velocity;
+
+        return seekingForce;
     }
 
     //override from character -> runs when health is 0
