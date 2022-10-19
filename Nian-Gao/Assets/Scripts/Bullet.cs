@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody2D rb;
     public GameObject self;
     public int direction;
+    public Vector2 MoveDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -31,5 +32,10 @@ public class Bullet : MonoBehaviour
         {
             Destroy(self);
         }
+    }
+    
+    public void SetMoveDirection(Vector2 dir)
+    {
+        MoveDirection = dir;
     }
 }

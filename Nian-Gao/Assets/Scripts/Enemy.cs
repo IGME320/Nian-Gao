@@ -17,6 +17,14 @@ public class Enemy : Character
     private bool shooting = true;
     public GameObject bullet;//The bullet object reference
 
+    [SerializeField]
+    private int bulletsAmount = 10;
+    [SerializeField]
+    private float startAngle = 0f, endAngle = 360f;
+
+    private Vector2 bulletMoveDirection;
+    
+
     //gets the scene switcher
     public GameObject switchScene;
 
@@ -24,6 +32,7 @@ public class Enemy : Character
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        InvokeRepeating("Fire", 0f, 2f);
     }
 
     // Update is called once per frame
@@ -34,15 +43,16 @@ public class Enemy : Character
     }
 
     //An update that occures at fixed intervals to bypass any frame inconsistancy
-    void FixedUpdate()
+   /* void FixedUpdate()
     {
         if(shooting)
         {
+            Fire();
             Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
         }
-    }
+    }*/
 
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
@@ -80,4 +90,26 @@ public class Enemy : Character
         yield return new WaitForSeconds(1.25f);//Waits for a short amount of time
         shooting = true;//lets the enemy shoot again
     }
+
+    private void Fire()
+    {
+        float angleStep = (endAngle - startAngle) / bulletsAmount;
+        float angle = startAngle;
+
+        for (int i = 0; i < bulletsAmount + 1; i++)
+        {
+            float bulDirX = transform.position.x + Mathf.Sin((angle * Mathf.PI) / 180f);
+            float bulDirY = transform.position.y + Mathf.Cos((angle * Mathf.PI) / 180f);
+
+            Vector3 bulMoveVector = new Vector3(bulDirX, bulDirY, 0f);
+            Vector2 bulDir = (bulMoveVector - transform.position).normalized;
+
+            GameObject b = Instantiate(bullet, bulMoveVector, Quaternion.identity);//instantiates a bullet
+            b.transform.position = transform.position;
+            b.transform.rotation = transform.rotation;
+            b.GetComponent<Bullet>().SetMoveDirection(bulDir);
+        }
+        angle += angleStep;
+    }
+
 }

@@ -912,6 +912,14 @@ PrefabInstance:
       propertyPath: switchScene
       value: 
       objectReference: {fileID: 5675712143528443952}
+    - target: {fileID: 439162736312586018, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
+      propertyPath: projectileSpeed
+      value: 1.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 439162736312586018, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
+      propertyPath: numberOfProjectiles
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 734548170050476390, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2007,6 +2015,10 @@ PrefabInstance:
       propertyPath: bullet
       value: 
       objectReference: {fileID: 5319640098566905205, guid: 865bb409d1be7a249b1d4425d325650d, type: 3}
+    - target: {fileID: 4055988407375199960, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
+      propertyPath: health
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 4055988407375199960, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: healthBar
       value: 
