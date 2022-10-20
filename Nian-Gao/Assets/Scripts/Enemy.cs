@@ -43,6 +43,7 @@ public class Enemy : Character
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        setHealth(200);
     }
 
     // Update is called once per frame

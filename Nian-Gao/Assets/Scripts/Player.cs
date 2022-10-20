@@ -37,6 +37,7 @@ public class Player : Character
         cc = GetComponent<CapsuleCollider2D>();
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+        setHealth(100);
     }
 
     // Update is called once per frame
@@ -62,10 +63,10 @@ public class Player : Character
         //Checks if the user is holding left click or the space bar AND if the player is able to shoot
         if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && shooting == true)
         {
-            GameObject b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+            GameObject b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y +1f, transform.position.z), Quaternion.identity);//instantiates a bullet
             b.GetComponent<Bullet>().SetXDirection(Camera.main.ScreenToWorldPoint(Input.mousePosition).x);//Makes it so that bullets are aimed using the mouse
             b.GetComponent<Bullet>().SetYDirection(Camera.main.ScreenToWorldPoint(Input.mousePosition).y);//
-            b.GetComponent<Bullet>().SetSpeed(7);//Makes the bullet slightly slower
+            b.GetComponent<Bullet>().SetSpeed(3);//Makes the bullet slightly slower
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
         }
