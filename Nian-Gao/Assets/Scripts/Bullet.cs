@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
     void Update()
     {
     
-        rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, Ydirection);//Moves the bullet at a fixed veloccity
+        rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, SPEED*speedMultiplier*Ydirection);//Moves the bullet at a fixed veloccity (x,y)
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -35,14 +35,19 @@ public class Bullet : MonoBehaviour
         }
     }
     
+    //used for changing direction of velocity
     public void SetXDirection(float dir)
     {
         Xdirection = dir;
     }
+
+    //used for changing direction of velocity
     public void SetYDirection(float dir)
     {
         Ydirection = dir;
     }
+
+    //changes speed of bullet
     public void SetSpeed(int speed)
     {
         SPEED = speed;

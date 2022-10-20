@@ -24,8 +24,15 @@ public class Enemy : Character
 
     private Vector2 bulletMoveDirection;
     
-    public int[] shotArray = new int[] { 1, 2 };
-    private int count = 0;
+
+    /*shotArray
+     * Creates the pattern of different shot types
+     * 1 = SingleShot()
+     * 2 = CircleForwardShot()
+     * 3 = CircleShot()
+    */ 
+    private int[] shotArray = new int[] { 1, 2, 1, 3 };
+    private int index = 0; //index of array
 
     //gets the scene switcher
     public GameObject switchScene;
@@ -34,7 +41,6 @@ public class Enemy : Character
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //InvokeRepeating("CircleShot", 0f, 2f);
     }
 
     // Update is called once per frame
@@ -49,23 +55,27 @@ public class Enemy : Character
     {
         if(shooting)
         {
-            switch(shotArray[count])
+            switch(shotArray[index])
             {
                 case 1:
                     SingleShot();
-                    count++;
+                    index++;
                     break;
                 case 2:
+                    CircleForwardShot();
+                    index++;
+                    break;
+                case 3:
                     CircleShot();
-                    count++;
+                    index++;
                     break;
                 default:
-                    count = 0;
+                    index = 0;
                     break;
             }
-            if(count >= shotArray.Length)
+            if(index >= shotArray.Length)
             {
-                count = 0;
+                index = 0;
             }
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
@@ -109,33 +119,85 @@ public class Enemy : Character
         shooting = true;//lets the enemy shoot again
     }
 
-    private void CircleShot()
+    // Shoots a ring of bullets that expand as they travel
+    private void CircleForwardShot()
     {
         float angleStep = (endAngle - startAngle) / bulletsAmount;
         float angle = startAngle;
 
         for (int i = 0; i < bulletsAmount + 1; i++)
         {
+            //The angle detrinators
             float bulDirX = transform.position.x + Mathf.Sin((angle * Mathf.PI) / 180f);
             float bulDirY = transform.position.y + Mathf.Cos((angle * Mathf.PI) / 180f);
 
+            //builds position, I don't think we really need this but incase we ever switch to a more normal bullet system I am
+            //leaving it as it doesn't hurt anything
             Vector3 bulMoveVector = new Vector3(bulDirX, bulDirY, 0f);
             Vector2 bulDir = (bulMoveVector - transform.position).normalized;
 
+            //Creates the bullets and sets their velocity directions and speed.
             GameObject b = Instantiate(bullet, bulMoveVector, Quaternion.identity);//instantiates a bullet
             b.GetComponent<Bullet>().SetXDirection(-bulDirX);
-            b.GetComponent<Bullet>().SetYDirection(5*bulDirY);
+            b.GetComponent<Bullet>().SetYDirection(bulDirY); //can easily change to a decreasing ring size by making negative (looks cool)
             b.GetComponent<Bullet>().SetSpeed(1);
             angle += angleStep;
         }
         
     }
+
+    //Normal straight ahead 1 bullet shot
     private void SingleShot()
     {
         GameObject b = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
         b.GetComponent<Bullet>().SetXDirection(-1f);
         b.GetComponent<Bullet>().SetYDirection(0f);
         b.GetComponent<Bullet>().SetSpeed(5);
+    }
+
+    //Shoots 8 bullets out in all directions
+    private void CircleShot()
+    {
+        //left bullet
+        GameObject left = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        left.GetComponent<Bullet>().SetXDirection(-1f);
+        left.GetComponent<Bullet>().SetYDirection(0f);
+        left.GetComponent<Bullet>().SetSpeed(3);
+        //right bullet
+        GameObject right = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        right.GetComponent<Bullet>().SetXDirection(1f);
+        right.GetComponent<Bullet>().SetYDirection(0f);
+        right.GetComponent<Bullet>().SetSpeed(5);
+        //up bullet
+        GameObject up = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        up.GetComponent<Bullet>().SetXDirection(0f);
+        up.GetComponent<Bullet>().SetYDirection(1f);
+        up.GetComponent<Bullet>().SetSpeed(3);
+        //down bullet
+        GameObject down = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        down.GetComponent<Bullet>().SetXDirection(0f);
+        down.GetComponent<Bullet>().SetYDirection(-1f);
+        down.GetComponent<Bullet>().SetSpeed(3);
+        //left down bullet
+        GameObject leftDown = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        leftDown.GetComponent<Bullet>().SetXDirection(-1f);
+        leftDown.GetComponent<Bullet>().SetYDirection(-1f);
+        leftDown.GetComponent<Bullet>().SetSpeed(3);
+        //right up bullet
+        GameObject rightUp = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        rightUp.GetComponent<Bullet>().SetXDirection(1f);
+        rightUp.GetComponent<Bullet>().SetYDirection(1f);
+        rightUp.GetComponent<Bullet>().SetSpeed(3);
+        //left up bullet
+        GameObject leftUp = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        leftUp.GetComponent<Bullet>().SetXDirection(-1f);
+        leftUp.GetComponent<Bullet>().SetYDirection(1f);
+        leftUp.GetComponent<Bullet>().SetSpeed(3);
+        //right down bullet
+        GameObject rightDown = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        rightDown.GetComponent<Bullet>().SetXDirection(1f);
+        rightDown.GetComponent<Bullet>().SetYDirection(-1f);
+        rightDown.GetComponent<Bullet>().SetSpeed(3);
     }
 
 }
