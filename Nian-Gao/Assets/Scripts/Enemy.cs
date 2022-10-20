@@ -24,6 +24,8 @@ public class Enemy : Character
 
     private Vector2 bulletMoveDirection;
     
+    public int[] shotArray = new int[] { 1, 2 };
+    private int count = 0;
 
     //gets the scene switcher
     public GameObject switchScene;
@@ -32,7 +34,7 @@ public class Enemy : Character
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        InvokeRepeating("Fire", 0f, 2f);
+        //InvokeRepeating("CircleShot", 0f, 2f);
     }
 
     // Update is called once per frame
@@ -43,16 +45,32 @@ public class Enemy : Character
     }
 
     //An update that occures at fixed intervals to bypass any frame inconsistancy
-   /* void FixedUpdate()
+   void FixedUpdate()
     {
         if(shooting)
         {
-            Fire();
-            Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+            switch(shotArray[count])
+            {
+                case 1:
+                    SingleShot();
+                    count++;
+                    break;
+                case 2:
+                    CircleShot();
+                    count++;
+                    break;
+                default:
+                    count = 0;
+                    break;
+            }
+            if(count >= shotArray.Length)
+            {
+                count = 0;
+            }
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
         }
-    }*/
+    }
 
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
@@ -91,7 +109,7 @@ public class Enemy : Character
         shooting = true;//lets the enemy shoot again
     }
 
-    private void Fire()
+    private void CircleShot()
     {
         float angleStep = (endAngle - startAngle) / bulletsAmount;
         float angle = startAngle;
@@ -105,11 +123,19 @@ public class Enemy : Character
             Vector2 bulDir = (bulMoveVector - transform.position).normalized;
 
             GameObject b = Instantiate(bullet, bulMoveVector, Quaternion.identity);//instantiates a bullet
-            b.transform.position = transform.position;
-            b.transform.rotation = transform.rotation;
-            b.GetComponent<Bullet>().SetMoveDirection(bulDir);
+            b.GetComponent<Bullet>().SetXDirection(-bulDirX);
+            b.GetComponent<Bullet>().SetYDirection(5*bulDirY);
+            b.GetComponent<Bullet>().SetSpeed(1);
+            angle += angleStep;
         }
-        angle += angleStep;
+        
+    }
+    private void SingleShot()
+    {
+        GameObject b = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+        b.GetComponent<Bullet>().SetXDirection(-1f);
+        b.GetComponent<Bullet>().SetYDirection(0f);
+        b.GetComponent<Bullet>().SetSpeed(5);
     }
 
 }

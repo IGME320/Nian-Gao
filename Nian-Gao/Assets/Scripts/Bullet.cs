@@ -7,12 +7,12 @@ public class Bullet : MonoBehaviour
 {
 
     //Variables and constants
-    const int SPEED = 10;
+    public int SPEED = 10;
     public float speedMultiplier;
     private Rigidbody2D rb;
     public GameObject self;
-    public int direction;
-    public Vector2 MoveDirection;
+    public float Xdirection;
+    public float Ydirection;
 
     // Start is called before the first frame update
     void Start()
@@ -24,8 +24,7 @@ public class Bullet : MonoBehaviour
     void Update()
     {
     
-        rb.velocity = new Vector2(SPEED * speedMultiplier,0f);
-        //rb.velocity = new Vector2(SPEED*speedMultiplier*direction, 0f);//Moves the bullet at a fixed veloccity
+        rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, Ydirection);//Moves the bullet at a fixed veloccity
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -36,8 +35,16 @@ public class Bullet : MonoBehaviour
         }
     }
     
-    public void SetMoveDirection(Vector2 dir)
+    public void SetXDirection(float dir)
     {
-        MoveDirection = dir;
+        Xdirection = dir;
+    }
+    public void SetYDirection(float dir)
+    {
+        Ydirection = dir;
+    }
+    public void SetSpeed(int speed)
+    {
+        SPEED = speed;
     }
 }
