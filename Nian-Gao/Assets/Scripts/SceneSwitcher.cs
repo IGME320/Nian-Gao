@@ -23,7 +23,7 @@ public class SceneSwitcher : MonoBehaviour
     public void ChangeScene()
     {
 
-        if (Input.anyKey && (currentScene.name == "Start_Menu" || currentScene.name == "Restart" || currentScene.name == "Win_Restart"))//If any button is pressed and in either the start or restart menus
+        if ((currentScene.name == "Start_Menu" || currentScene.name == "Restart" || currentScene.name == "Win_Restart"))//If any button is pressed and in either the start or restart menus
         {
             SceneManager.LoadScene("Main", LoadSceneMode.Single);//Loads main scene
         }
@@ -38,12 +38,6 @@ public class SceneSwitcher : MonoBehaviour
     public void Win()
     {
         SceneManager.LoadScene("Win_Restart", LoadSceneMode.Single);//loads Win scene when called
-    }
-
-    //runs every frame
-    public void Update()
-    {
-        ChangeScene();//calls the change scene function
     }
 }
 

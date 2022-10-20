@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 //idk what input system you want but make sure to add it here
 
@@ -27,6 +28,8 @@ public class Player : Character
     public GameObject bullet;//The bullet object reference
     public float shootDelay;//The delay between bullet spawns
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +48,9 @@ public class Player : Character
     //An update that occures at fixed intervals to bypass any frame inconsistancy
     void FixedUpdate()
     {
-        ShootPlayer();
         Move();
+        //Aim();
+        ShootPlayer();
     }
 
     /// <summary>
@@ -58,7 +62,10 @@ public class Player : Character
         //Checks if the user is holding left click or the space bar AND if the player is able to shoot
         if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && shooting == true)
         {
-            Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+            GameObject b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+            b.GetComponent<Bullet>().SetXDirection(Camera.main.ScreenToWorldPoint(Input.mousePosition).x);//Makes it so that bullets are aimed using the mouse
+            b.GetComponent<Bullet>().SetYDirection(Camera.main.ScreenToWorldPoint(Input.mousePosition).y);//
+            b.GetComponent<Bullet>().SetSpeed(7);//Makes the bullet slightly slower
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
         }
@@ -122,6 +129,26 @@ public class Player : Character
     private void Eat()
     {
         //This can wait till after sprint 2
+    }
+
+
+    //Keeps player aimed at the mouse cursors position
+    //Directly alters player rotation
+    //Curently not working
+    private void Aim()
+    {
+        Vector3 mouseTransform = Camera.main.ScreenToWorldPoint(Input.mousePosition);//gets mouse position
+        mouseTransform = transform.InverseTransformPoint(mouseTransform);
+        //lookRoatation = transform.rotation;//gets player rotation
+        Vector3 direction = (mouseTransform - transform.position).normalized;//sets the normal vector direction to the mouse position compated to the players
+        //direction.Set(direction.x, direction.y, 0);
+        //transform.Rotate(direction, Mathf.Atan2(direction.y, direction.x));
+        //mouseTransform.Set(mouseTransform.x, mouseTransform.y, 0);//the z is set to zero so that the mouse is on the same plane as the player
+
+        transform.Rotate(direction, Mathf.Atan2(direction.y, direction.x));
+        //transform.LookAt(mouseTransform, Vector3.one);
+
+        //I honestly have no idea how to get this to work
     }
 
 

@@ -1701,6 +1701,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5534644205557973371, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -5534644205557973371, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: m_GravityScale
       value: 0
       objectReference: {fileID: 0}
@@ -2006,6 +2010,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2485607367074107758, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001749041477518055, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001749041477518055, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
+      propertyPath: m_FlipY
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3001749041477518055, guid: 77ff744e4583c414aa8b5c4eeaf95aaf, type: 3}
