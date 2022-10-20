@@ -16,7 +16,7 @@ public abstract class Character : MonoBehaviour
     //fields
     //Feel free to add more as things come up
     public int health;
-    public Vector3 position;
+    public Vector2 position;
     public int shotDamage;//damage of a character's bullets
     public string shotType;//type of shot they are shooting, thought that having a field like this would make powerups easier
     protected string[] shotTypeArray = { "normal", "spread-shot", "speed-shot" };//array of different shot types for ^^
