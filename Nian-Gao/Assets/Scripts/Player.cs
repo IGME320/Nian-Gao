@@ -153,13 +153,20 @@ public class Player : Character
     }
 
 
-    //Checks for bullet collisions
+    //Checks for collisions
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //checks for bullet collisions
         if(collision.transform.tag == "EnemyBullet")
         {
-            TakeDamage();
+            TakeDamage(10);
             Destroy(collision.gameObject);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
+        //checks for enemy collisions
+        else if (collision.transform.tag == "Enemy")
+        {
+            TakeDamage(20);
             rb.AddForce(-collision.rigidbody.velocity);
         }
     }

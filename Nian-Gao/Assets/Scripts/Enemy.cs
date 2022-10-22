@@ -89,9 +89,23 @@ public class Enemy : Character
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
     {
+        //temp vector2 to hold the new velocity
+        Vector2 moveVelocity = Vector2.zero;
         //calls seek to follow the player
-        //planning on adding stuff to avoid bullets too
-        rb.velocity = Seek(player.GetComponent<Rigidbody2D>().position);
+        moveVelocity += Seek(player.GetComponent<Rigidbody2D>().position);
+
+        //gets a reference to all the player bullets
+       /* GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        //if there all bullets to avoid, attempts to avoid all of them
+        if(bullets != null)
+        {
+            foreach (GameObject b in bullets)
+            {
+                moveVelocity += Flee(b.GetComponent<Rigidbody2D>().position);
+            }
+        }*/
+
+        rb.velocity = moveVelocity;
     }
 
     //helper function that steers the enemy towards the player
@@ -110,6 +124,22 @@ public class Enemy : Character
         return seekingForce;
     }
 
+    //helper function that steers the enemy away from bullets
+    protected Vector2 Flee(Vector2 targetPos)
+    {
+        //calculate our desired velocity
+        //a vector away from target position
+        Vector2 desiredVelocity = targetPos - rb.position;
+
+        //scales to max speed
+        desiredVelocity = -1.0f * (desiredVelocity.normalized * maxSpeed);
+
+        //calculate the seek steering force
+        Vector2 fleeingForce = desiredVelocity - rb.velocity;
+
+        return fleeingForce;
+    }
+
     //override from character -> runs when health is 0
     protected override void Die()
     {
@@ -124,14 +154,15 @@ public class Enemy : Character
 
     }
 
+    //checks for collisions
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.tag == "Bullet")//Detects collision with a bullet
         {
             rb.velocity = new Vector2(0f, 0f);//Sets velocity to zero so this object is not pushed by the bullet
             Destroy(collision.gameObject);//Destroys the colliding bullet
+            TakeDamage(10);
         }
-        TakeDamage();
     }
 
     //This coroutine will be used to toggle shooting on and off so that more than one particle can be used at one time

@@ -42,11 +42,11 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    //runs when a character gets hit will a bullet
-    protected void TakeDamage()
+    //runs when a character gets hit will a bullet or runs into something
+    protected void TakeDamage(int damage)
     {
-        //for now this doesn't use shotDamage and just takes 10 points of health
-        health-=10;
+        //subtracts the input damage from health
+        health-=damage;
         //updates the healthbar
         healthbar.SetHealth(health);
         
