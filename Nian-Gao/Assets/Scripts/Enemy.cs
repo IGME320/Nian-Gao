@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -91,21 +92,40 @@ public class Enemy : Character
     {
         //temp vector2 to hold the new velocity
         Vector2 moveVelocity = Vector2.zero;
-        //calls seek to follow the player
-        moveVelocity += Seek(player.GetComponent<Rigidbody2D>().position);
 
         //gets a reference to all the player bullets
-       /* GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        //if there all bullets to avoid, attempts to avoid all of them
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        //if there are bullets to avoid, attempts to avoid the close ones
         if(bullets != null)
         {
+            //gets absolute value of current enemy x and y
+            float x = Math.Abs(rb.GetComponent<Rigidbody2D>().position.x);
+            float y = Math.Abs(rb.GetComponent<Rigidbody2D>().position.y);
+
+            //loops through the bullets
             foreach (GameObject b in bullets)
             {
-                moveVelocity += Flee(b.GetComponent<Rigidbody2D>().position);
-            }
-        }*/
+                //gets absolute value of bullet x and y
+                float bx = Math.Abs(b.GetComponent<Rigidbody2D>().position.x);
+                float by = Math.Abs(b.GetComponent<Rigidbody2D>().position.y);
 
-        rb.velocity = moveVelocity;
+                //checks if bullet is close enough to avoid
+                if (x - bx < 6.0f || y - by < 4.5f)//these values seemed to work right, but feel free to change them
+                {
+                    moveVelocity += Flee(b.GetComponent<Rigidbody2D>().position);
+                }
+                
+            }
+        }
+
+        //if there are no bullets close enough
+        if(moveVelocity == Vector2.zero)
+        {
+            //calls seek to follow the player
+            moveVelocity += Seek(player.GetComponent<Rigidbody2D>().position);
+        }
+
+        rb.velocity = moveVelocity.normalized * maxSpeed;
     }
 
     //helper function that steers the enemy towards the player
