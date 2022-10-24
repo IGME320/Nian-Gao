@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
 {
 
     //Variables and constants
-    public int SPEED = 10;
+    public float SPEED = 10;
     public float speedMultiplier;
     private Rigidbody2D rb;
     public GameObject self;
@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour
     {
     
         rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, SPEED*speedMultiplier*Ydirection);//Moves the bullet at a fixed veloccity (x,y)
+        Debug.Log(rb.velocity);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -48,7 +49,7 @@ public class Bullet : MonoBehaviour
     }
 
     //changes speed of bullet
-    public void SetSpeed(int speed)
+    public void SetSpeed(float speed)
     {
         SPEED = speed;
     }

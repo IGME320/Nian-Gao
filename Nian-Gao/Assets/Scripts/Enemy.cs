@@ -213,7 +213,7 @@ public class Enemy : Character
             GameObject b = Instantiate(bullet, bulMoveVector, Quaternion.identity);//instantiates a bullet
             b.GetComponent<Bullet>().SetXDirection(-bulDirX);
             b.GetComponent<Bullet>().SetYDirection(bulDirY); //can easily change to a decreasing ring size by making negative (looks cool)
-            b.GetComponent<Bullet>().SetSpeed(1);
+            b.GetComponent<Bullet>().SetSpeed(0.5f);
             angle += angleStep;
         }
         
@@ -240,7 +240,7 @@ public class Enemy : Character
         GameObject right = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
         right.GetComponent<Bullet>().SetXDirection(1f);
         right.GetComponent<Bullet>().SetYDirection(0f);
-        right.GetComponent<Bullet>().SetSpeed(5);
+        right.GetComponent<Bullet>().SetSpeed(3);
         //up bullet
         GameObject up = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
         up.GetComponent<Bullet>().SetXDirection(0f);
