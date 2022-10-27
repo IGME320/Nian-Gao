@@ -179,7 +179,7 @@ MonoBehaviour:
     m_LineSpacing: 2
   m_Text: 'Welcome to Nian Gao!
 
-    Constrols are: WASD to move, Space or LMB to
+    Controls are: WASD to move, Space or LMB to
     Shoot.'
 --- !u!222 &90683111
 CanvasRenderer:
