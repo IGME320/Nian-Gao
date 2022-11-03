@@ -430,7 +430,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'You Win!
 
-    Play again?'
+    Next Level?'
 --- !u!222 &724922325
 CanvasRenderer:
   m_ObjectHideFlags: 0
