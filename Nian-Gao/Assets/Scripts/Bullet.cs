@@ -14,10 +14,12 @@ public class Bullet : MonoBehaviour
     public float Xdirection;
     public float Ydirection;
 
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     // Update is called once per frame
@@ -25,7 +27,7 @@ public class Bullet : MonoBehaviour
     {
     
         rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, SPEED*speedMultiplier*Ydirection);//Moves the bullet at a fixed veloccity (x,y)
-        Debug.Log(rb.velocity);
+        //Debug.Log(rb.velocity);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

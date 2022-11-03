@@ -97,17 +97,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9478519bf10118b45a1752299643dddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
   position: {x: 0, y: 0}
   shotDamage: 1
   shotType: normal
   healthbar: {fileID: 0}
+  mainCamera: {fileID: 0}
   speed: 3
   normalDamping: 0.1
   spriteSkin: {fileID: 3001749041477518055}
   switchScene: {fileID: 0}
   bullet: {fileID: 5319640098566905205, guid: 865bb409d1be7a249b1d4425d325650d, type: 3}
   shootDelay: 0
+  dashSpeed: 1000
+  startDashTime: 0.1
+  isflipped: 0
 --- !u!50 &-5534644205557973371
 Rigidbody2D:
   serializedVersion: 4

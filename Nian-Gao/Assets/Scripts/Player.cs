@@ -14,6 +14,8 @@ using UnityEngine;
 public class Player : Character
 {
 
+    [SerializeField] private Camera mainCamera;
+
     public float speed;
     public float normalDamping;
 
@@ -28,7 +30,11 @@ public class Player : Character
     public GameObject bullet;//The bullet object reference
     public float shootDelay;//The delay between bullet spawns
 
+    public float dashSpeed;//How far character goes when dashing
+    public float startDashTime;
+    private float dashTime;
 
+    public bool isflipped;
 
     // Start is called before the first frame update
     void Start()
@@ -38,12 +44,15 @@ public class Player : Character
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         setHealth(100);
+        dashTime = startDashTime;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Dash();
+        flip();
+        Debug.Log(isflipped);
     }
 
     //An update that occures at fixed intervals to bypass any frame inconsistancy
@@ -65,8 +74,19 @@ public class Player : Character
         //Checks if the user is holding left click or the space bar AND if the player is able to shoot
         if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && shooting == true)
         {
-            GameObject b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y +1f, transform.position.z), Quaternion.identity);//instantiates a bullet
-            
+            GameObject b;
+            if(isflipped == true){
+                b = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y +1f, transform.position.z), Quaternion.Euler(0, 0, 180));//instantiates a bullet
+            }
+                
+            else if(isflipped == false){
+                b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y +1f, transform.position.z), Quaternion.identity);
+                Debug.Log("yo");
+            }
+            else{
+                b = null;
+            }
+                
             b.GetComponent<Bullet>().SetXDirection(target.x);//Makes it so that bullets are aimed using the mouse
             b.GetComponent<Bullet>().SetYDirection(target.y);//
             b.GetComponent<Bullet>().SetSpeed(3);//Makes the bullet slightly slower
@@ -107,7 +127,27 @@ public class Player : Character
         //adds speed
         rb.velocity = new Vector2(currentSpeedX, currentSpeedY);
 
+        
+
     }
+
+    public void Dash(){
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetMouseButton(1)) && dashTime <= 0){
+            dashTime = startDashTime;
+            Debug.Log("dash");
+        }
+        if(dashTime > 0){
+            dashTime -= Time.deltaTime;
+            
+            rb.velocity = new Vector2(rb.velocity.x + (Input.GetAxisRaw("Horizontal")*dashSpeed), rb.velocity.y + (Input.GetAxisRaw("Vertical")*dashSpeed));
+            
+            
+            if(Input.GetAxisRaw("Horizontal") != 0 && Input.GetAxisRaw("Vertical") != 0){
+                rb.velocity = Vector3.forward * dashSpeed;
+            }
+        }
+    }
+
 
     //override from character -> runs when health is 0
     protected override void Die()
@@ -150,6 +190,20 @@ public class Player : Character
         {
             TakeDamage(20);
             rb.AddForce(-collision.rigidbody.velocity);
+        }
+    }
+
+
+    private void flip(){
+        //Debug.Log(transform.position);
+        //Debug.Log(mainCamera.ScreenToWorldPoint(Input.mousePosition).x);
+        if(transform.position.x > mainCamera.ScreenToWorldPoint(Input.mousePosition).x){
+            transform.localScale = new Vector3((float)0.5, (float)-0.5, 1);
+            isflipped = true;
+        }
+        else{
+            transform.localScale = new Vector3((float)0.5, (float)0.5, 1);
+            isflipped = false;
         }
     }
 }
