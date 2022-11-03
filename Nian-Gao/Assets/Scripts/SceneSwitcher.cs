@@ -23,9 +23,13 @@ public class SceneSwitcher : MonoBehaviour
     public void ChangeScene()
     {
 
-        if ((currentScene.name == "Start_Menu" || currentScene.name == "Restart" || currentScene.name == "Win_Restart"))//If any button is pressed and in either the start or restart menus
+        if ((currentScene.name == "Start_Menu" || currentScene.name == "Restart"))//If any button is pressed and in either the start or restart menus
         {
             SceneManager.LoadScene("Main", LoadSceneMode.Single);//Loads main scene
+        }
+        else if(currentScene.name == "Win_Restart") //takes the player to the next level
+        {
+            SceneManager.LoadScene("Level2", LoadSceneMode.Single);//loads level 2
         }
     }
 
@@ -35,9 +39,17 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene("Restart", LoadSceneMode.Single);//loads restart scene when called
     }
 
+    //Loads next scene when player wins a level
     public void Win()
     {
-        SceneManager.LoadScene("Win_Restart", LoadSceneMode.Single);//loads Win scene when called
+        if(currentScene.name == "Level2")
+        {
+            SceneManager.LoadScene("Start_Menu", LoadSceneMode.Single);//loads start when player Win is called in the second level
+        }
+        else
+        {
+            SceneManager.LoadScene("Win_Restart", LoadSceneMode.Single);//loads Win scene when called
+        }
     }
 }
 

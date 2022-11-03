@@ -25,7 +25,8 @@ public class Enemy : Character
     [SerializeField]
     private float startAngle = 0f, endAngle = 360f;
 
-    private Vector2 bulletMoveDirection;
+
+
     
 
     /*shotArray
@@ -33,8 +34,11 @@ public class Enemy : Character
      * 1 = SingleShot()
      * 2 = CircleForwardShot()
      * 3 = CircleShot()
+     * 4 = GridShot()
+     * 5 = Rapid shots, shot time span between shots
     */ 
-    private int[] shotArray = new int[] { 1, 2, 1, 3 };
+    private int[] shotArray = new int[] { 1, 2, 3, 4, 1, 1, 3, 4, 2, 4 };
+    private int[] shotBelowHalf = new int[] { 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 5, 3, 3, 2 };
     private int index = 0; //index of array
 
     //gets the scene switcher
@@ -44,7 +48,7 @@ public class Enemy : Character
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        setHealth(200);
+        setHealth(1000);
     }
 
     // Update is called once per frame
@@ -59,30 +63,97 @@ public class Enemy : Character
     {
         if(shooting)
         {
-            switch(shotArray[index])
+            if(healthCheck())
             {
-                case 1:
-                    SingleShot();
-                    index++;
-                    break;
-                case 2:
-                    CircleForwardShot();
-                    index++;
-                    break;
-                case 3:
-                    CircleShot();
-                    index++;
-                    break;
-                default:
+                switch (shotBelowHalf[index])
+                {
+                    case 1:
+                        SingleShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(.75f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 2:
+                        CircleForwardShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(.1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 3:
+                        CircleShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(.75f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 4:
+                        GridShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(.75f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 5:
+                        SingleShot();
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(.1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        index++;
+                        break;
+                    default:
+                        index = 0;
+                        break;
+                }
+                if (index >= shotBelowHalf.Length)
+                {
                     index = 0;
-                    break;
+                }
             }
-            if(index >= shotArray.Length)
+            else
             {
-                index = 0;
+                switch (shotArray[index])
+                {
+                    case 1:
+                        SingleShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 2:
+                        CircleForwardShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 3:
+                        CircleShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 4:
+                        GridShot();
+                        index++;
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        break;
+                    case 5:
+                        SingleShot();
+                        shooting = false;//The player can no longer shoot
+                        StartCoroutine(ToggleShoot(.1f));//Calls a coroutine to wait and let the player shoot after a small delay
+                        index++;
+                        break;
+                    default:
+                        index = 0;
+                        break;
+                    
+                }
+                if(index >= shotArray.Length)
+                {
+                    index = 0;
+                }
             }
-            shooting = false;//The player can no longer shoot
-            StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
+            
+            
+            /*shooting = false;//The player can no longer shoot
+            StartCoroutine(ToggleShoot(1.25f));//Calls a coroutine to wait and let the player shoot after a small delay*/
         }
         Move();
     }
@@ -186,9 +257,9 @@ public class Enemy : Character
     }
 
     //This coroutine will be used to toggle shooting on and off so that more than one particle can be used at one time
-    private IEnumerator ToggleShoot()
+    private IEnumerator ToggleShoot(float time)
     {
-        yield return new WaitForSeconds(1.25f);//Waits for a short amount of time
+        yield return new WaitForSeconds(time);//Waits for a short amount of time
         shooting = true;//lets the enemy shoot again
     }
 
@@ -197,7 +268,7 @@ public class Enemy : Character
     {
         float angleStep = (endAngle - startAngle) / bulletsAmount;
         float angle = startAngle;
-
+        Vector3 direction = player.transform.position - transform.position;
         for (int i = 0; i < bulletsAmount + 1; i++)
         {
             //The angle detrinators
@@ -211,8 +282,8 @@ public class Enemy : Character
 
             //Creates the bullets and sets their velocity directions and speed.
             GameObject b = Instantiate(bullet, bulMoveVector, Quaternion.identity);//instantiates a bullet
-            b.GetComponent<Bullet>().SetXDirection(-bulDirX);
-            b.GetComponent<Bullet>().SetYDirection(bulDirY); //can easily change to a decreasing ring size by making negative (looks cool)
+            b.GetComponent<Bullet>().SetXDirection((-bulDirX+direction.x)/4);
+            b.GetComponent<Bullet>().SetYDirection((bulDirY+direction.y)/4); //can easily change to a decreasing ring size by making negative (looks cool)
             b.GetComponent<Bullet>().SetSpeed(0.5f);
             angle += angleStep;
         }
@@ -222,9 +293,10 @@ public class Enemy : Character
     //Normal straight ahead 1 bullet shot
     private void SingleShot()
     {
+        Vector3 direction = player.transform.position - transform.position;  //used to aim at player
         GameObject b = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
-        b.GetComponent<Bullet>().SetXDirection(-1f);
-        b.GetComponent<Bullet>().SetYDirection(0f);
+        b.GetComponent<Bullet>().SetXDirection(direction.x/20);
+        b.GetComponent<Bullet>().SetYDirection(direction.y/20);
         b.GetComponent<Bullet>().SetSpeed(5);
     }
 
@@ -271,6 +343,22 @@ public class Enemy : Character
         rightDown.GetComponent<Bullet>().SetXDirection(1f);
         rightDown.GetComponent<Bullet>().SetYDirection(-1f);
         rightDown.GetComponent<Bullet>().SetSpeed(3);
+    }
+
+    //Creates a grid of bullets projected out from the enemy
+    public void GridShot()
+    {
+        float[] angles = new float[] { .5f, .75f, 1f, -.5f, -.75f, -1f };
+        foreach (float x in angles)
+        {
+            foreach (float y in angles)
+            {
+                GameObject left = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);//instantiates a bullet
+                left.GetComponent<Bullet>().SetXDirection(x);
+                left.GetComponent<Bullet>().SetYDirection(y);
+                left.GetComponent<Bullet>().SetSpeed(3);
+            }
+        }
     }
 
 }
