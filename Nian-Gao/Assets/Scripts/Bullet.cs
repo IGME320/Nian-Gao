@@ -36,6 +36,10 @@ public class Bullet : MonoBehaviour
         {
             Destroy(self);
         }
+        if(collision.transform.tag == "Bullet" || collision.transform.tag == "EnemyBullet")
+        {
+            Destroy(collision.gameObject);
+        }
     }
     
     //used for changing direction of velocity
