@@ -27,10 +27,7 @@ public class Bullet : MonoBehaviour
     {
     
         rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, SPEED*speedMultiplier*Ydirection);//Moves the bullet at a fixed veloccity (x,y)
-<<<<<<< HEAD
         //Debug.Log(rb.velocity);
-=======
->>>>>>> 0b98516cdc877e0ed6c04335818a174f480992c6
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
