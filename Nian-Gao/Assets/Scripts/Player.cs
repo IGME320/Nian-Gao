@@ -43,7 +43,19 @@ public class Player : Character
         cc = GetComponent<CapsuleCollider2D>();
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-        setHealth(100);
+
+        //if this is the first level, sets health to 100, else sets to the health from last level
+        if(SwitcherManager.thisManager.playerHealth ==0)
+        {
+            setHealth(100);
+        }
+        else
+        {
+            setHealth(SwitcherManager.thisManager.playerHealth);
+            healthbar.SetHealth(getHealth());
+            //set anything else you want to pass on here
+        }
+
         dashTime = startDashTime;
     }
 
@@ -155,8 +167,8 @@ public class Player : Character
         //Set the GameObject's Color to grey
         spriteSkin.color = Color.grey;
 
-        //removes gameObject after 1 second
-        Destroy(gameObject, 1);
+        //removes gameObject after 2 seconds
+        Destroy(gameObject, 2);
 
         //switches the scene
         switchScene.GetComponent<SceneSwitcher>().Restart();

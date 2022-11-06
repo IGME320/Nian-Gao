@@ -19,6 +19,7 @@ public class Enemy : Character
     public GameObject bullet;//The bullet object reference
     public GameObject player; //player object reference (must be the one in the scene)
     public float maxSpeed;//fastest enemy can go (thinking 1 or 2 slower than player)
+    public bool fleer;//if the enemy runs from bullets or not
 
     [SerializeField]
     private int bulletsAmount = 10;
@@ -166,8 +167,8 @@ public class Enemy : Character
 
         //gets a reference to all the player bullets
         GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        //if there are bullets to avoid, attempts to avoid the close ones
-        if(bullets != null)
+        //if there are bullets to avoid and enemy is a fleer, attempts to avoid the close ones
+        if(bullets != null && fleer)
         {
             //gets absolute value of current enemy x and y
             float x = Math.Abs(rb.GetComponent<Rigidbody2D>().position.x);
@@ -181,7 +182,7 @@ public class Enemy : Character
                 float by = Math.Abs(b.GetComponent<Rigidbody2D>().position.y);
 
                 //checks if bullet is close enough to avoid
-                if (x - bx < 6.0f || y - by < 4.5f)//these values seemed to work right, but feel free to change them
+                if (x - bx < 2.0f || y - by < 1.5f)//these values seemed to work right, but feel free to change them
                 {
                     moveVelocity += Flee(b.GetComponent<Rigidbody2D>().position);
                 }
@@ -237,8 +238,12 @@ public class Enemy : Character
         //Set the GameObject's Color to grey
         spriteSkin.color = Color.grey;
 
-        //removes gameObject after 1 second
-        Destroy(gameObject, 1);
+        //removes gameObject after 3 seconds
+        Destroy(gameObject, 5);
+
+        //gets player health for next level
+        SwitcherManager.thisManager.playerHealth = player.GetComponent<Player>().getHealth();
+        //get anything else you might want for the next level here
 
         //Goes to win screen
         switchScene.GetComponent<SceneSwitcher>().Win();

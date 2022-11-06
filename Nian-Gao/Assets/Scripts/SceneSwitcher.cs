@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
+    //keeps track of current scene
     Scene currentScene;
 
     private void Start()
@@ -29,24 +30,36 @@ public class SceneSwitcher : MonoBehaviour
         }
         else if(currentScene.name == "Win_Restart") //takes the player to the next level
         {
-            SceneManager.LoadScene("Level2", LoadSceneMode.Single);//loads level 2
+            //switch that checks the last won level and sends the player to the next one
+            //this is currently way more than needs to be here, but when we add more levels this will come in handy
+            switch (SwitcherManager.thisManager.lastLevel)
+            {
+                case 1:
+                    SceneManager.LoadScene("Level2", LoadSceneMode.Single);//loads level 2
+                    break;
+            }
+            
         }
     }
 
     //Loads the restart scene when the player dies
     public void Restart()
     {
+        SwitcherManager.thisManager.Reset();
         SceneManager.LoadScene("Restart", LoadSceneMode.Single);//loads restart scene when called
     }
 
     //Loads next scene when player wins a level
     public void Win()
     {
-        if(currentScene.name == "Level2")
+        SwitcherManager.thisManager.lastLevel++; //updates the last level won
+
+        if (currentScene.name == "Level2")//this should always be the last level
         {
+            SwitcherManager.thisManager.Reset();
             SceneManager.LoadScene("Start_Menu", LoadSceneMode.Single);//loads start when player Win is called in the second level
         }
-        else
+        else//this runs for all other levels
         {
             SceneManager.LoadScene("Win_Restart", LoadSceneMode.Single);//loads Win scene when called
         }

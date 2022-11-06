@@ -61,11 +61,18 @@ public abstract class Character : MonoBehaviour
     abstract protected void Move();
     //again death will mean different things for both
     abstract protected void Die();
+
     public void setHealth(int _health)
     {
         health = _health;
         maxHealth = _health;
     }
+
+    public int getHealth()
+    {
+        return health;
+    }
+
     public bool healthCheck()
     {
         if(health <= maxHealth/2)
