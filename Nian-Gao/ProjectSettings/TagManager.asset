@@ -7,6 +7,7 @@ TagManager:
   - Bullet
   - Border
   - EnemyBullet
+  - Power Up
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - EnemyBullet
   - Bullet Bounding
   - Bounding
-  - 
+  - Power Ups
   - 
   - 
   - 
