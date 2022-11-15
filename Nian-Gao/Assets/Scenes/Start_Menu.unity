@@ -179,8 +179,8 @@ MonoBehaviour:
     m_LineSpacing: 2
   m_Text: 'Welcome to Nian Gao!
 
-    Controls are: WASD to move, Space or LMB to
-    Shoot.
+    Controls are: WASD to move, mouse to aim, and
+    left click to shoot.
 
     While moving press Z to Dash.'
 --- !u!222 &90683111

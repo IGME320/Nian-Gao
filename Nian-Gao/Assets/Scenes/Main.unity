@@ -1153,6 +1153,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1986937274}
     - target: {fileID: 439162736312586018, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
+      propertyPath: moveTrack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 439162736312586018, guid: d112a61b5a498b647b59461d7a7cb80e, type: 3}
       propertyPath: switchScene
       value: 
       objectReference: {fileID: 5675712143528443952}
