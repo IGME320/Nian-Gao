@@ -9,7 +9,7 @@ public class SwitcherManager : MonoBehaviour
     //keeps track of the last level played
     public int lastLevel = 0;
     //keeps track of player health
-    public int playerHealth = 0;
+    public float playerHealth = 0;
 
     //add references to anything else we want between levels here
 

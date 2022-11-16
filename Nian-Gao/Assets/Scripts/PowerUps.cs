@@ -8,6 +8,9 @@ public enum PowerUp//These are all the current power up types, they are subject 
     None,//No power up
     QuickShot,//Increases player fire rate
     StackSpread,//Gives the player a spread shot that is stacked vertically
+    SpreadShot,//Gives the player a forking spreadshot
+    Heal,//Heals the player
+    Shield,//Gives the player a shield to block damage
 }
 public class PowerUps : MonoBehaviour
 {
@@ -32,7 +35,7 @@ public class PowerUps : MonoBehaviour
         
 
         //determines the type of this power up
-        int rand = Random.Range(0, 2) + 1;//Will generate a number between 0 and 2, then will add 1 so that the PowerUp.None is not chosen
+        int rand = Random.Range(1, 6);//Generates a random number between 1(inclusive) and 6(exclusive)
         pUp = (PowerUp)rand;
     }
 
@@ -49,11 +52,23 @@ public class PowerUps : MonoBehaviour
         {
             case PowerUp.QuickShot:
                 sprite.color = Color.red;
-                duration = 3f;
+                duration = 5f;
                 break;
             case PowerUp.StackSpread:
-                sprite.color = Color.blue;
-                duration = 3f;
+                sprite.color = Color.yellow;
+                duration = 5f;
+                break;
+            case PowerUp.SpreadShot:
+                sprite.color = Color.magenta;
+                duration = 5f;
+                break;
+            case PowerUp.Shield:
+                sprite.color = Color.white;
+                duration = 10f;
+                break;
+            case PowerUp.Heal:
+                sprite.color = Color.green;
+                duration = 0f;
                 break;
         }
     }

@@ -28,10 +28,16 @@ public class Player : Character
     //gets the scene switcher
     public GameObject switchScene;
 
+    //shooting memebers
     private bool shooting = true;//Used to toggle shooting on and off
     public GameObject bullet;//The bullet object reference
     public float shootDelay;//The delay between bullet spawns
-    private PowerUp currentPU = PowerUp.None;
+
+    //power up members
+    private PowerUp currentBPU;//The current powerUp that changes player bullet pattern
+    public GameObject shieldObj;//The shield power up that the player will use
+    private List<PowerUp> activePowerUps = new List<PowerUp>() { PowerUp.None};//A list of active power ups that the player currently has, with the 0th index being where the shot type is stored
+    private Coroutine activeShotType;
     
 
     public float dashSpeed;//How far character goes when dashing
@@ -48,6 +54,10 @@ public class Player : Character
         cc = GetComponent<CapsuleCollider2D>();
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+
+        shieldObj.layer = 13;
+        shieldObj.gameObject.SetActive(false);
+        currentBPU = activePowerUps[0];
 
         //if this is the first level, sets health to 100, else sets to the health from last level
         if(SwitcherManager.thisManager.playerHealth ==0)
@@ -80,7 +90,35 @@ public class Player : Character
         transform.rotation = Quaternion.LookRotation(Vector3.back, targetDir);//Rotates the player so that the face the mouse
         transform.Rotate(new Vector3(0f, 0f, 90f));//A correction rotation so that the "front" of the player faces the mouse
         ShootPlayer(targetDir);//Shoots
+
+        currentBPU = activePowerUps[0];//continuosly updates what the current shot type is
     }
+    //Checks for collisions
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //checks for bullet collisions
+        if (collision.transform.tag == "EnemyBullet")
+        {
+            TakeDamage(10);
+            Destroy(collision.gameObject);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
+        //checks for enemy collisions
+        if (collision.transform.tag == "Enemy")
+        {
+            TakeDamage(20);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
+
+        //Checks for power up collision
+        if (collision.transform.tag == "Power Up")
+        {
+            ApplyPowerUp(collision.gameObject.GetComponent<PowerUps>().PowerUpType, collision.gameObject.GetComponent<PowerUps>().Duration);
+            Destroy(collision.gameObject);
+        }
+    }
+
+
 
     /// <summary>
     /// Shoots for the player
@@ -95,18 +133,14 @@ public class Player : Character
         {
             Vector3 emitPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f, transform.position.z);
             Quaternion emitQuat = Quaternion.identity;
-            GameObject b;
             if(isflipped == true){
                 emitQuat = Quaternion.Euler(0, 0, 180);
             }                
             else if(isflipped == false){
                 emitQuat=  Quaternion.identity;
             }
-            else{
-                b = null;
-            }
             
-            switch (currentPU)
+            switch (currentBPU)
             { 
                 case PowerUp.None:
                     CreateBullet(emitPos, emitQuat, target);
@@ -116,6 +150,7 @@ public class Player : Character
                     CreateBullet(emitPos, emitQuat, target);
                     delayMod = .5f;
                     break;
+                case PowerUp.SpreadShot:
                 case PowerUp.StackSpread:
                     //emits 3 bullets vertically stacked
                     CreateBullet(emitPos, emitQuat, target);
@@ -141,8 +176,10 @@ public class Player : Character
         GameObject b = Instantiate(bullet, startPos, startQuat);
         b.GetComponent<Bullet>().SetXDirection(target.x);
         b.GetComponent<Bullet>().SetYDirection(target.y);
-        b.GetComponent<Bullet>().SetSpeed(3);
+        b.GetComponent<Bullet>().SetSpeed(5);
     }
+
+
 
     /// <summary>
     /// Toggles the player's ability to shoot
@@ -154,11 +191,61 @@ public class Player : Character
         yield return new WaitForSeconds(shootDelay*delayMod);//Waits for a short amount of time
         shooting = true;//lets the player shoot again
     }
-
-    private IEnumerator TogglePowerUp(float powerUpLength)
+    /// <summary>
+    /// Togggles the current power up off after its duration runs out
+    /// </summary>
+    /// <param name="powerUpLength">The duration of the power up</param>
+    /// <returns></returns>
+    private IEnumerator TogglePowerUp(float powerUpLength, int index)
+    {
+        yield return new WaitForSeconds(powerUpLength);        
+        if (activePowerUps[index] == PowerUp.Shield)//An extra step to toggel the shield
+        {
+            shieldObj.layer = 13;
+            shieldObj.gameObject.SetActive(false);
+        }
+        activePowerUps.Remove(activePowerUps[index]);//removes this active debuff from the list
+        
+    }
+    /// <summary>
+    /// Specifically toggles the active shooting power up at activePowerUps[0] so that there are not multiple types of power ups that change the shot type
+    /// </summary>
+    /// <param name="powerUpLength">Duration of the power up</param>
+    /// <returns></returns>
+    private IEnumerator ToggleShootPowerUp(float powerUpLength)
     {
         yield return new WaitForSeconds(powerUpLength);
-        currentPU = PowerUp.None;
+        activePowerUps[0] = PowerUp.None;
+    }
+
+    /// <summary>
+    /// This method applies the effects of all powerups, and starts timers for their duration
+    /// </summary>
+    private void ApplyPowerUp(PowerUp newPower, float duration)
+    {
+        switch(newPower)
+        {
+            case PowerUp.None:
+                break;
+            case PowerUp.QuickShot:
+            case PowerUp.StackSpread:
+            case PowerUp.SpreadShot:
+                StopCoroutine("TogglleShootPowerUp");//ends the previous shot type
+                StartCoroutine(ToggleShootPowerUp(duration));//starts the new shot type
+                activePowerUps[0] = newPower;
+                break; 
+            case PowerUp.Heal:
+                health += maxHealth * .5f;
+                activePowerUps.Add(newPower);
+                StartCoroutine(TogglePowerUp(duration, activePowerUps.Count - 1));
+                break;
+            case PowerUp.Shield:
+                activePowerUps.Add(newPower); 
+                shieldObj.layer = 8;
+                shieldObj.gameObject.SetActive(true);
+                StartCoroutine(TogglePowerUp(duration, activePowerUps.Count - 1));
+                break;
+        }
     }
 
 
@@ -221,40 +308,7 @@ public class Player : Character
 
         //switches the scene
         switchScene.GetComponent<SceneSwitcher>().Restart();
-    }
-
-
-    //when player presses KEY eating happens
-    private void Eat()
-    {
-        //This can wait till after sprint 2
-    }
-
-    //Checks for collisions
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        //checks for bullet collisions
-        if(collision.transform.tag == "EnemyBullet")
-        {
-            TakeDamage(10);
-            Destroy(collision.gameObject);
-            rb.AddForce(-collision.rigidbody.velocity);
-        }
-        //checks for enemy collisions
-        if (collision.transform.tag == "Enemy")
-        {
-            TakeDamage(20);
-            rb.AddForce(-collision.rigidbody.velocity);
-        }
-
-        //Checks for power up collision
-        if(collision.transform.tag == "Power Up")
-        {
-            currentPU = collision.gameObject.GetComponent<PowerUps>().PowerUpType;//Sets the power up type
-            StartCoroutine(TogglePowerUp(collision.gameObject.GetComponent<PowerUps>().Duration));//Starts the timer on the power up
-            Destroy(collision.gameObject);
-        }
-    }
+    }    
 
 
     private void flip(){

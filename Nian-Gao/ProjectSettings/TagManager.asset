@@ -8,6 +8,7 @@ TagManager:
   - Border
   - EnemyBullet
   - Power Up
+  - Shield
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Bullet Bounding
   - Bounding
   - Power Ups
-  - 
+  - ShieldStorage
   - 
   - 
   - 
