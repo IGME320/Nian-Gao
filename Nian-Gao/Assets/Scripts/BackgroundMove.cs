@@ -18,8 +18,7 @@ public class BackgroundMove : MonoBehaviour
         transform.position -= new Vector3(moveSpeed,0,0);
 
         if(transform.position.x <= -38){
-            Instantiate(background, new Vector3(76, 0, 1), Quaternion.Euler(0, 0, 90));
-            Destroy(this.gameObject);
+            transform.position = new Vector3(38, 0, 0);
         }
     }
 }

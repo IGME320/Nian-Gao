@@ -22,6 +22,12 @@ public abstract class Character : MonoBehaviour
     public string shotType;//type of shot they are shooting, thought that having a field like this would make powerups easier
     protected string[] shotTypeArray = { "normal", "spread-shot", "speed-shot" };//array of different shot types for ^^
 
+    [SerializeField]
+    private float iFrames;
+    [SerializeField]
+    private int flashes;
+    [SerializeField]
+    protected SpriteRenderer sr;
 
     //reference to healthbar
     public HealthBar healthbar;
@@ -49,7 +55,7 @@ public abstract class Character : MonoBehaviour
         health-=damage;
         //updates the healthbar
         healthbar.SetHealth(health);
-        
+        StartCoroutine(iFrameMoment());
         //checks for death
         if(health <= 0)
         {
@@ -75,4 +81,20 @@ public abstract class Character : MonoBehaviour
         return false;
     }
 
+
+
+    private IEnumerator iFrameMoment(){
+        Physics2D.IgnoreLayerCollision(8, 7, true);
+        Physics2D.IgnoreLayerCollision(8, 9, true);
+        
+        for(int i = 0; i<flashes; i++){
+            sr.color = new Color(1, 0, 0, 0.5f);
+            Debug.Log("hit");
+            yield return new WaitForSeconds(0.15f);
+            sr.color = Color.white;
+            yield return new WaitForSeconds(0.15f);
+        }
+        Physics2D.IgnoreLayerCollision(8, 7, false);
+        Physics2D.IgnoreLayerCollision(8, 9, false);
+    }
 }

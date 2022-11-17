@@ -22,7 +22,6 @@ public class Player : Character
     private Rigidbody2D rb;
     private CapsuleCollider2D cc;
     //gets the sprite renderer
-    public SpriteRenderer spriteSkin;
     //gets the scene switcher
     public GameObject switchScene;
 
@@ -36,6 +35,10 @@ public class Player : Character
 
     public bool isflipped;
 
+    Vector2 lastCommand;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,7 +47,9 @@ public class Player : Character
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         setHealth(100);
-        dashTime = startDashTime;
+        dashTime = 0;
+        lastCommand = new Vector2(1,0);
+        
     }
 
     // Update is called once per frame
@@ -52,7 +57,6 @@ public class Player : Character
     {
         Dash();
         flip();
-        Debug.Log(isflipped);
     }
 
     //An update that occures at fixed intervals to bypass any frame inconsistancy
@@ -81,7 +85,6 @@ public class Player : Character
                 
             else if(isflipped == false){
                 b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y +1f, transform.position.z), Quaternion.identity);
-                Debug.Log("yo");
             }
             else{
                 b = null;
@@ -132,19 +135,28 @@ public class Player : Character
     }
 
     public void Dash(){
-        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetMouseButton(1)) && dashTime <= 0){
+        if ((Input.GetKeyDown(KeyCode.E) || Input.GetMouseButton(1)) && dashTime <= 0){
             dashTime = startDashTime;
-            Debug.Log("dash");
+            //Debug.Log("dash");
         }
+        if(Input.GetAxisRaw("Horizontal") != 0) 
+            lastCommand = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+        else if(Input.GetAxisRaw("Vertical") != 0)
+            lastCommand = new Vector2(0, Input.GetAxisRaw("Vertical"));
+
         if(dashTime > 0){
             dashTime -= Time.deltaTime;
             
             rb.velocity = new Vector2(rb.velocity.x + (Input.GetAxisRaw("Horizontal")*dashSpeed), rb.velocity.y + (Input.GetAxisRaw("Vertical")*dashSpeed));
+
+            if(Input.GetAxisRaw("Horizontal") != 0 && (Input.GetAxisRaw("Vertical") != 0))
+                rb.velocity = rb.velocity + lastCommand * (dashSpeed);
+            else
+                rb.velocity = rb.velocity + lastCommand * (dashSpeed+50);
+
+            //Debug.Log(lastCommand);
+
             
-            
-            if(Input.GetAxisRaw("Horizontal") != 0 && Input.GetAxisRaw("Vertical") != 0){
-                rb.velocity = Vector3.forward * dashSpeed;
-            }
         }
     }
 
@@ -153,7 +165,7 @@ public class Player : Character
     protected override void Die()
     {
         //Set the GameObject's Color to grey
-        spriteSkin.color = Color.grey;
+        sr.color = Color.grey;
 
         //removes gameObject after 1 second
         Destroy(gameObject, 1);
@@ -206,4 +218,6 @@ public class Player : Character
             isflipped = false;
         }
     }
+
+    
 }
