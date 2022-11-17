@@ -60,6 +60,12 @@ public class Player : Character
         dashTime = 0;
         lastCommand = new Vector2(1,0);
         
+        //Needed set up for the shield powerup
+        shieldObj.layer = 13;	
+        shieldObj.gameObject.SetActive(false);	
+        currentBPU = activePowerUps[0];
+        
+        shooting = true;//Makes sure the player is able to shoot at the beggining of levels
     }
 
     // Update is called once per frame
@@ -86,23 +92,22 @@ public class Player : Character
         //checks for bullet collisions
         if (collision.transform.tag == "EnemyBullet")
         {
-            GameObject b;
-            if(isflipped == true){
-                b = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y +1f, transform.position.z), Quaternion.Euler(0, 0, 180));//instantiates a bullet
-            }
-                
-            else if(isflipped == false){
-                b = Instantiate(bullet, new Vector3(transform.position.x + 1f, transform.position.y +1f, transform.position.z), Quaternion.identity);
-            }
-            else{
-                b = null;
-            }
-                
-            b.GetComponent<Bullet>().SetXDirection(target.x);//Makes it so that bullets are aimed using the mouse
-            b.GetComponent<Bullet>().SetYDirection(target.y);//
-            b.GetComponent<Bullet>().SetSpeed(3);//Makes the bullet slightly slower
-            shooting = false;//The player can no longer shoot
-            StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
+            TakeDamage(10);
+            Destroy(collision.gameObject);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
+        //checks for enemy collisions
+        if (collision.transform.tag == "Enemy")
+        {
+            TakeDamage(20);
+            rb.AddForce(-collision.rigidbody.velocity);
+        }
+
+        //Checks for power up collision
+        if (collision.transform.tag == "Power Up")
+        {
+            ApplyPowerUp(collision.gameObject.GetComponent<PowerUps>().PowerUpType, collision.gameObject.GetComponent<PowerUps>().Duration);
+            Destroy(collision.gameObject);
         }
     }
 
