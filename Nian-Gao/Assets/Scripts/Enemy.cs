@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 //current namimg/coding conventions
 //1) add comments to new code so everyone can quickly tell what it does
 //2) name functions like this: ExampleFuntion()
@@ -19,6 +20,8 @@ public class Enemy : Character
     public GameObject bullet;//The bullet object reference
     public GameObject player; //player object reference (must be the one in the scene)
     public float maxSpeed;//fastest enemy can go (thinking 1 or 2 slower than player)
+    public bool moveTrack;//if the enemy moves on a track or not
+    private Vector2 seekPos = new Vector2(10.16f, -7.32f);//position the enemy seeks it is on a track
 
     [SerializeField]
     private int bulletsAmount = 10;
@@ -164,33 +167,13 @@ public class Enemy : Character
         //temp vector2 to hold the new velocity
         Vector2 moveVelocity = Vector2.zero;
 
-        //gets a reference to all the player bullets
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        //if there are bullets to avoid, attempts to avoid the close ones
-        if(bullets != null)
+        //if the enemy moves on a track
+        if (moveTrack)
         {
-            //gets absolute value of current enemy x and y
-            float x = Math.Abs(rb.GetComponent<Rigidbody2D>().position.x);
-            float y = Math.Abs(rb.GetComponent<Rigidbody2D>().position.y);
-
-            //loops through the bullets
-            foreach (GameObject b in bullets)
-            {
-                //gets absolute value of bullet x and y
-                float bx = Math.Abs(b.GetComponent<Rigidbody2D>().position.x);
-                float by = Math.Abs(b.GetComponent<Rigidbody2D>().position.y);
-
-                //checks if bullet is close enough to avoid
-                if (x - bx < 6.0f || y - by < 4.5f)//these values seemed to work right, but feel free to change them
-                {
-                    moveVelocity += Flee(b.GetComponent<Rigidbody2D>().position);
-                }
-                
-            }
+            moveVelocity += Track();
         }
-
-        //if there are no bullets close enough
-        if(moveVelocity == Vector2.zero)
+        //follows player otherwise
+        else
         {
             //calls seek to follow the player
             moveVelocity += Seek(player.GetComponent<Rigidbody2D>().position);
@@ -215,20 +198,31 @@ public class Enemy : Character
         return seekingForce;
     }
 
-    //helper function that steers the enemy away from bullets
-    protected Vector2 Flee(Vector2 targetPos)
+    //steers enemy on a square track
+    protected Vector2 Track()
     {
-        //calculate our desired velocity
-        //a vector away from target position
-        Vector2 desiredVelocity = targetPos - rb.position;
-
-        //scales to max speed
-        desiredVelocity = -1.0f * (desiredVelocity.normalized * maxSpeed);
-
-        //calculate the seek steering force
-        Vector2 fleeingForce = desiredVelocity - rb.velocity;
-
-        return fleeingForce;
+        //checks if enemy is close to the seekPos and updates
+        if (Math.Abs(rb.position.x - seekPos.x)<1 && Math.Abs(rb.position.y - seekPos.y) < 1)
+        {
+            if (seekPos == new Vector2(9.85f, 5.14f))//upper right pos
+            {
+                seekPos = new Vector2(10.16f, -7.32f);
+            }
+            else if (seekPos == new Vector2(10.16f, -7.32f))//lower right pos
+            {
+                seekPos = new Vector2(-9.99f, -7.32f);
+            }
+            else if (seekPos == new Vector2(-9.99f, -7.32f))//lower left pos
+            {
+                seekPos = new Vector2(-9.99f, 5.14f);
+            }
+            else if (seekPos == new Vector2(-9.99f, 5.14f))//upper left pos
+            {
+                seekPos = new Vector2(9.85f, 5.14f);
+            }
+        }
+        //seeks the seekPos
+        return Seek(seekPos);
     }
 
     //override from character -> runs when health is 0
@@ -237,8 +231,12 @@ public class Enemy : Character
         //Set the GameObject's Color to grey
         spriteSkin.color = Color.grey;
 
-        //removes gameObject after 1 second
-        Destroy(gameObject, 1);
+        //removes gameObject after 3 seconds
+        Destroy(gameObject, 5);
+
+        //gets player health for next level
+        SwitcherManager.thisManager.playerHealth = player.GetComponent<Player>().getHealth();
+        //get anything else you might want for the next level here
 
         //Goes to win screen
         switchScene.GetComponent<SceneSwitcher>().Win();

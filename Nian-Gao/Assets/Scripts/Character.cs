@@ -15,8 +15,8 @@ public abstract class Character : MonoBehaviour
 {
     //fields
     //Feel free to add more as things come up
-    private int health;
-    private int maxHealth;
+    protected float health;
+    protected float maxHealth;
     public Vector2 position;
     public int shotDamage;//damage of a character's bullets
     public string shotType;//type of shot they are shooting, thought that having a field like this would make powerups easier
@@ -67,11 +67,18 @@ public abstract class Character : MonoBehaviour
     abstract protected void Move();
     //again death will mean different things for both
     abstract protected void Die();
-    public void setHealth(int _health)
+
+    public void setHealth(float _health)
     {
         health = _health;
         maxHealth = _health;
     }
+
+    public float getHealth()
+    {
+        return health;
+    }
+
     public bool healthCheck()
     {
         if(health <= maxHealth/2)

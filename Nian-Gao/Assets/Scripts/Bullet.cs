@@ -27,14 +27,17 @@ public class Bullet : MonoBehaviour
     {
     
         rb.velocity = new Vector2(SPEED*speedMultiplier*Xdirection, SPEED*speedMultiplier*Ydirection);//Moves the bullet at a fixed veloccity (x,y)
-        //Debug.Log(rb.velocity);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.transform.tag == "Border")
+        if(collision.transform.tag == "Border" || collision.transform.tag == "Shield")
         {
             Destroy(self);
+        }
+        if(collision.transform.tag == "Bullet" || collision.transform.tag == "EnemyBullet")
+        {
+            Destroy(collision.gameObject);
         }
     }
     
