@@ -144,6 +144,12 @@ public class Player : Character
                     delayMod = .5f;
                     break;
                 case PowerUp.SpreadShot:
+                    ////emits 3 bullets vertically stacked
+                    //CreateBullet(emitPos, emitQuat, target);
+                    //CreateBullet(new Vector3(emitPos.x, emitPos.y + 1, emitPos.z), Quaternion.Euler//(emitQuat.x, emitQuat.y, emitQuat.z+22.5f), target);
+                    //CreateBullet(new Vector3(emitPos.x, emitPos.y - 1, emitPos.z), Quaternion.Euler//(emitQuat.x, emitQuat.y, emitQuat.z - 22.5f), target);
+                    //delayMod = 1f;
+                    //break;
                 case PowerUp.StackSpread:
                     //emits 3 bullets vertically stacked
                     CreateBullet(emitPos, emitQuat, target);

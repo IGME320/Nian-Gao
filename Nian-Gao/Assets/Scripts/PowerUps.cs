@@ -32,7 +32,7 @@ public class PowerUps : MonoBehaviour
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();//gets the sprite renderer
-        
+
 
         //determines the type of this power up
         int rand = Random.Range(1, 6);//Generates a random number between 1(inclusive) and 6(exclusive)
