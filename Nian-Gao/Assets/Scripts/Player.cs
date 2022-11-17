@@ -45,12 +45,9 @@ public class Player : Character
 
     public bool isflipped;
 
-<<<<<<< HEAD
     Vector2 lastCommand;
 
     
-=======
->>>>>>> d6450e7aa5e8c98dd7fe79a80584a374932bd600
 
     // Start is called before the first frame update
     void Start()
@@ -59,32 +56,10 @@ public class Player : Character
         cc = GetComponent<CapsuleCollider2D>();
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-<<<<<<< HEAD
         setHealth(100);
         dashTime = 0;
         lastCommand = new Vector2(1,0);
         
-=======
-
-        shieldObj.layer = 13;
-        shieldObj.gameObject.SetActive(false);
-        currentBPU = activePowerUps[0];
-
-        //if this is the first level, sets health to 100, else sets to the health from last level
-        if(SwitcherManager.thisManager.playerHealth ==0)
-        {
-            setHealth(100);
-        }
-        else
-        {
-            setHealth(SwitcherManager.thisManager.playerHealth);
-            healthbar.SetHealth(getHealth());
-            //set anything else you want to pass on here
-        }
-
-        dashTime = startDashTime;
-        shooting = true;//Makes sure the player is able to shoot at the beggining of levels
->>>>>>> d6450e7aa5e8c98dd7fe79a80584a374932bd600
     }
 
     // Update is called once per frame
@@ -111,7 +86,6 @@ public class Player : Character
         //checks for bullet collisions
         if (collision.transform.tag == "EnemyBullet")
         {
-<<<<<<< HEAD
             GameObject b;
             if(isflipped == true){
                 b = Instantiate(bullet, new Vector3(transform.position.x - 1f, transform.position.y +1f, transform.position.z), Quaternion.Euler(0, 0, 180));//instantiates a bullet
@@ -129,24 +103,6 @@ public class Player : Character
             b.GetComponent<Bullet>().SetSpeed(3);//Makes the bullet slightly slower
             shooting = false;//The player can no longer shoot
             StartCoroutine(ToggleShoot());//Calls a coroutine to wait and let the player shoot after a small delay
-=======
-            TakeDamage(10);
-            Destroy(collision.gameObject);
-            rb.AddForce(-collision.rigidbody.velocity);
-        }
-        //checks for enemy collisions
-        if (collision.transform.tag == "Enemy")
-        {
-            TakeDamage(20);
-            rb.AddForce(-collision.rigidbody.velocity);
-        }
-
-        //Checks for power up collision
-        if (collision.transform.tag == "Power Up")
-        {
-            ApplyPowerUp(collision.gameObject.GetComponent<PowerUps>().PowerUpType, collision.gameObject.GetComponent<PowerUps>().Duration);
-            Destroy(collision.gameObject);
->>>>>>> d6450e7aa5e8c98dd7fe79a80584a374932bd600
         }
     }
 
@@ -341,12 +297,7 @@ public class Player : Character
     protected override void Die()
     {
         //Set the GameObject's Color to grey
-<<<<<<< HEAD
         sr.color = Color.grey;
-=======
-        spriteSkin.color = Color.grey;
-        shooting = false;//removes the player's ability to shot after they ahve died
->>>>>>> d6450e7aa5e8c98dd7fe79a80584a374932bd600
 
         //removes gameObject after 2 seconds
         Destroy(gameObject, 2);
