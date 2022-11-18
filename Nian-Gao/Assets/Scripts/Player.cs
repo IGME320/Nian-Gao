@@ -56,7 +56,7 @@ public class Player : Character
         cc = GetComponent<CapsuleCollider2D>();
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-        setHealth(100);
+        setHealth(200);
         dashTime = 0;
         lastCommand = new Vector2(1,0);
         

@@ -24,7 +24,7 @@ public class Enemy : Character
     private Vector2 seekPos = new Vector2(10.16f, -7.32f);//position the enemy seeks it is on a track
 
     [SerializeField]
-    private int bulletsAmount = 10;
+    private int bulletsAmount = 8;
     [SerializeField]
     private float startAngle = 0f, endAngle = 360f;
 
