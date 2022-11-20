@@ -20,11 +20,21 @@ public class SceneSwitcher : MonoBehaviour
         currentScene = SceneManager.GetActiveScene();
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P) && currentScene.name == "Scrolling_Intro")
+        {
+            ChangeScene();
+        }
+    }
     //switches the scene based on what the current scene is
     public void ChangeScene()
     {
-
-        if ((currentScene.name == "Start_Menu" || currentScene.name == "Restart"))//If any button is pressed and in either the start or restart menus
+        if(currentScene.name == "Scrolling_Intro")
+        {
+            SceneManager.LoadScene("Start_Menu", LoadSceneMode.Single);
+        }
+        else if ((currentScene.name == "Start_Menu" || currentScene.name == "Restart"))//If any button is pressed and in either the start or restart menus
         {
             SceneManager.LoadScene("Main", LoadSceneMode.Single);//Loads main scene
         }
