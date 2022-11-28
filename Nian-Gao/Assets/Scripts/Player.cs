@@ -310,6 +310,10 @@ public class Player : Character
         //Set the GameObject's Color to grey
         sr.color = Color.grey;
 
+        //resets coroutines and powerups
+        StopAllCoroutines();
+        activePowerUps = new List<PowerUp>() { PowerUp.None };//A list of active power ups that the player currently has, with the 0th index being where the shot type is stored
+
         //removes gameObject after 2 seconds
         Destroy(gameObject, 2);
 
