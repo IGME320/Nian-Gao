@@ -182,7 +182,7 @@ MonoBehaviour:
     Controls are: WASD to move, mouse to aim, and
     left click to shoot.
 
-    While moving press Z to Dash.
+    While moving press E to Dash.
 
     Escape to pause/resume'
 --- !u!222 &90683111

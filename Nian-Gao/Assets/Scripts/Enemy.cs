@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Security.Cryptography;
 using UnityEngine;
 
 
@@ -22,6 +24,7 @@ public class Enemy : Character
     public float maxSpeed;//fastest enemy can go (thinking 1 or 2 slower than player)
     public bool moveTrack;//if the enemy moves on a track or not
     private Vector2 seekPos = new Vector2(10.16f, -7.32f);//position the enemy seeks it is on a track
+    private bool isFlipped = false;
 
     [SerializeField]
     private int bulletsAmount = 8;
@@ -161,6 +164,40 @@ public class Enemy : Character
         Move();
     }
 
+    private void Flip()
+    {
+        Vector3 pos = GetComponent<Transform>().position;
+        if (pos.x > player.GetComponent<Transform>().position.x)
+        {
+            spriteSkin.flipX = false;
+            isFlipped = false;
+        }
+        else
+        {
+            spriteSkin.flipX = true;
+            isFlipped = true;
+        }
+        /*if (Math.Abs(player.GetComponent<Rigidbody2D>().position.x) - rb.position.x > rb.position.x)
+        {
+            if (!isFlipped)
+            {
+                spriteSkin.flipX = true;
+                isFlipped = true;
+            }
+            else
+            {
+                spriteSkin.flipX = false;
+                isFlipped = false;
+            }
+            
+        }*/
+        /*else if(isFlipped && Math.Abs(player.GetComponent<Rigidbody2D>().position.x) - rb.position.x < rb.position.x)
+        {
+            spriteSkin.flipX = false;
+            isFlipped = false;
+        }*/
+    }
+
     //override from character -> define enemy movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
     {
@@ -180,6 +217,7 @@ public class Enemy : Character
         }
 
         rb.velocity = moveVelocity.normalized * maxSpeed;
+        Flip();
     }
 
     //helper function that steers the enemy towards the player
