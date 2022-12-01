@@ -182,7 +182,10 @@ MonoBehaviour:
     Controls are: WASD to move, mouse to aim, and
     left click to shoot.
 
-    While moving press E to Dash.
+    Gain a power up after 20 player-to-enemy bullet collisions.
+
+    While
+    moving press Left Shift to Dash.
 
     Escape to pause/resume'
 --- !u!222 &90683111
@@ -311,7 +314,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000038147, y: -175}
+  m_AnchoredPosition: {x: 0.0000038147, y: -187}
   m_SizeDelta: {x: 232.8, y: 66.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &428457474

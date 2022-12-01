@@ -27,16 +27,24 @@ public class Player : Character
     //gets the scene switcher
     public GameObject switchScene;
 
-    //shooting memebers
+    //shooting
     private bool shooting = true;//Used to toggle shooting on and off
     public GameObject bullet;//The bullet object reference
     public float shootDelay;//The delay between bullet spawns
 
-    //power up members
+    //power up tracking
     private PowerUp currentBPU;//The current powerUp that changes player bullet pattern
     public GameObject shieldObj;//The shield power up that the player will use
-    private List<PowerUp> activePowerUps = new List<PowerUp>() { PowerUp.None};//A list of active power ups that the player currently has, with the 0th index being where the shot type is stored
-    private Coroutine activeShotType;
+    private bool shieldAct = false;//is the shield ative
+
+    //power up spawning variables
+    private int bCollisions = 0; //The number of bullet collisions
+    public GameObject powerUp;//reference to the powerup objecct for spawning
+    public int BCol//public get set for use in the bullet script
+    {
+        get { return bCollisions; }
+        set { bCollisions = value; }
+    }
     
 
     public float dashSpeed;//How far character goes when dashing
@@ -63,7 +71,7 @@ public class Player : Character
         //Needed set up for the shield powerup
         shieldObj.layer = 13;	
         shieldObj.gameObject.SetActive(false);	
-        currentBPU = activePowerUps[0];
+        currentBPU = PowerUp.None;
         
         shooting = true;//Makes sure the player is able to shoot at the beggining of levels
     }
@@ -84,7 +92,8 @@ public class Player : Character
         transform.Rotate(new Vector3(0f, 0f, 90f));//A correction rotation so that the "front" of the player faces the mouse
         ShootPlayer(targetDir);//Shoots
 
-        currentBPU = activePowerUps[0];//continuosly updates what the current shot type is
+        //Checks for power up spawning
+        SpawnPowerUp();
     }
     //Checks for collisions
     private void OnCollisionEnter2D(Collision2D collision)
@@ -92,14 +101,20 @@ public class Player : Character
         //checks for bullet collisions
         if (collision.transform.tag == "EnemyBullet")
         {
-            TakeDamage(10);
+            if(!shieldAct)//if the shield is not active
+            {
+                TakeDamage(10);//take damage
+            }
             Destroy(collision.gameObject);
             rb.AddForce(-collision.rigidbody.velocity);
         }
         //checks for enemy collisions
         if (collision.transform.tag == "Enemy")
         {
-            TakeDamage(20);
+            if (!shieldAct)//if the shield is not active
+            {
+                TakeDamage(20);//take damage
+            }
             rb.AddForce(-collision.rigidbody.velocity);
         }
 
@@ -112,7 +127,7 @@ public class Player : Character
     }
 
 
-
+    //Shooting related methods
     /// <summary>
     /// Shoots for the player
     /// </summary>
@@ -124,34 +139,33 @@ public class Player : Character
         //Checks if the user is holding left click or the space bar AND if the player is able to shoot
         if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && shooting == true)
         {
-            Vector3 emitPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f, transform.position.z);
-            Quaternion emitQuat = Quaternion.identity;
+            Vector3 emitPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f, transform.position.z);//sets the position that the base bullet will be fired from
+            Quaternion emitQuat = Quaternion.identity;//the angle at which the bullet is rotated, if the player is flipped
             if(isflipped == true){
-                emitQuat = Quaternion.Euler(0, 0, 180);
+                emitQuat = Quaternion.Euler(0, 0, 180);//flips the bullet to match player flipping
             }                
             else if(isflipped == false){
                 emitQuat=  Quaternion.identity;
             }
             
+            //Checks whaty the current shooting power up is, and spawnd bullets and changes delay acordingly
             switch (currentBPU)
             { 
-                case PowerUp.None:
+                case PowerUp.None://Base shooting
                     CreateBullet(emitPos, emitQuat, target);
                     delayMod = 1f;
                     break;
-                case PowerUp.QuickShot:
+                case PowerUp.QuickShot://Shoots 2x fire
                     CreateBullet(emitPos, emitQuat, target);
                     delayMod = .5f;
                     break;
-                case PowerUp.SpreadShot:
-                    ////emits 3 bullets vertically stacked
-                    //CreateBullet(emitPos, emitQuat, target);
-                    //CreateBullet(new Vector3(emitPos.x, emitPos.y + 1, emitPos.z), Quaternion.Euler//(emitQuat.x, emitQuat.y, emitQuat.z+22.5f), target);
-                    //CreateBullet(new Vector3(emitPos.x, emitPos.y - 1, emitPos.z), Quaternion.Euler//(emitQuat.x, emitQuat.y, emitQuat.z - 22.5f), target);
-                    //delayMod = 1f;
-                    //break;
-                case PowerUp.StackSpread:
-                    //emits 3 bullets vertically stacked
+                case PowerUp.SpreadShot://emits 3 bullets vertically stacked that diverge
+                    CreateBullet(emitPos, emitQuat, target);
+                    CreateBullet(new Vector3(emitPos.x, emitPos.y + 1, emitPos.z), emitQuat, Quaternion.Euler(emitQuat.x, emitQuat.y,emitQuat.z+12.5f)*target);
+                    CreateBullet(new Vector3(emitPos.x, emitPos.y - 1, emitPos.z), emitQuat, Quaternion.Euler(emitQuat.x, emitQuat.y,emitQuat.z - 12.5f)*target);
+                delayMod = 1f;
+                break;
+                case PowerUp.StackSpread://emits 3 bullets vertically stacked that travel in parallel
                     CreateBullet(emitPos, emitQuat, target);
                     CreateBullet(new Vector3(emitPos.x, emitPos.y + 1, emitPos.z), emitQuat, target);
                     CreateBullet(new Vector3(emitPos.x, emitPos.y - 1, emitPos.z), emitQuat, target);
@@ -177,9 +191,6 @@ public class Player : Character
         b.GetComponent<Bullet>().SetYDirection(target.y);
         b.GetComponent<Bullet>().SetSpeed(5);
     }
-
-
-
     /// <summary>
     /// Toggles the player's ability to shoot
     /// </summary>
@@ -190,33 +201,36 @@ public class Player : Character
         yield return new WaitForSeconds(shootDelay*delayMod);//Waits for a short amount of time
         shooting = true;//lets the player shoot again
     }
+
+    //powerup related methods
     /// <summary>
-    /// Togggles the current power up off after its duration runs out
+    /// Togggles the shiled power up off after its duration runs out
     /// </summary>
     /// <param name="powerUpLength">The duration of the power up</param>
     /// <returns></returns>
-    private IEnumerator TogglePowerUp(float powerUpLength, int index)
+    private IEnumerator ToggleShield(float powerUpLength)
     {
         yield return new WaitForSeconds(powerUpLength);        
-        if (activePowerUps[index] == PowerUp.Shield)//An extra step to toggel the shield
-        {
-            shieldObj.layer = 13;
-            shieldObj.gameObject.SetActive(false);
-        }
-        activePowerUps.Remove(activePowerUps[index]);//removes this active debuff from the list
         
+        //turns the shield off
+        shieldObj.layer = 13;
+        shieldObj.gameObject.SetActive(false);
+        shieldAct = false;
+
+        //makes sure that the player is on
+        gameObject.SetActive(true);
+        gameObject.layer = 8;
     }
     /// <summary>
-    /// Specifically toggles the active shooting power up at activePowerUps[0] so that there are not multiple types of power ups that change the shot type
+    /// Toggles currentBPU so that there are not multiple types of power ups that change the shot type
     /// </summary>
     /// <param name="powerUpLength">Duration of the power up</param>
     /// <returns></returns>
     private IEnumerator ToggleShootPowerUp(float powerUpLength)
     {
         yield return new WaitForSeconds(powerUpLength);
-        activePowerUps[0] = PowerUp.None;
+        currentBPU = PowerUp.None;
     }
-
     /// <summary>
     /// This method applies the effects of all powerups, and starts timers for their duration
     /// </summary>
@@ -231,22 +245,49 @@ public class Player : Character
             case PowerUp.SpreadShot:
                 StopCoroutine("TogglleShootPowerUp");//ends the previous shot type
                 StartCoroutine(ToggleShootPowerUp(duration));//starts the new shot type
-                activePowerUps[0] = newPower;
+                currentBPU = newPower;
                 break; 
             case PowerUp.Heal:
                 health += maxHealth * .5f;
-                activePowerUps.Add(newPower);
-                StartCoroutine(TogglePowerUp(duration, activePowerUps.Count - 1));
                 break;
             case PowerUp.Shield:
-                activePowerUps.Add(newPower); 
+                StopCoroutine("ToggleShield");//Ends the previous shield powerup, esseantially this resets the duration fo the shield powerup
                 shieldObj.layer = 8;
                 shieldObj.gameObject.SetActive(true);
-                StartCoroutine(TogglePowerUp(duration, activePowerUps.Count - 1));
+                shieldAct = true;
+                StartCoroutine(ToggleShield(duration));
                 break;
         }
     }
+    /// <summary>
+    /// Spawns a power up on the player's loation once the right amount of bullet collisions is counted.
+    /// </summary>
+    private void SpawnPowerUp()
+    {
+        if(bCollisions == 20)//Once 20 collisions are counted
+        {
+            bCollisions = 0;//resets the collision counter
 
+            Instantiate(powerUp, transform.position, Quaternion.identity);//Creates a random power up on the player
+        }
+    }
+
+    public void TurnOffPowerUPs()
+    {
+        //stops all coroutines and resets powerup list
+        StopAllCoroutines();
+
+        currentBPU = PowerUp.None;//Resets the current bullet pattern powerup
+
+        //turns the shield off
+        shieldObj.layer = 13;
+        shieldObj.gameObject.SetActive(false);
+        shieldAct = false;
+
+        //makes sure that the player is on
+        gameObject.SetActive(true);
+        gameObject.layer = 8;
+    }
 
     //override from character -> define player movement here (if it works better in Character feel free to move/change things)
     protected override void Move()
@@ -278,7 +319,7 @@ public class Player : Character
     }
 
     public void Dash(){
-        if ((Input.GetKeyDown(KeyCode.E) || Input.GetMouseButton(1)) && dashTime <= 0){
+        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetMouseButton(1)) && dashTime <= 0){
             dashTime = startDashTime;
             //Debug.Log("dash");
         }
@@ -310,9 +351,7 @@ public class Player : Character
         //Set the GameObject's Color to grey
         sr.color = Color.grey;
 
-        //resets coroutines and powerups
-        StopAllCoroutines();
-        activePowerUps = new List<PowerUp>() { PowerUp.None };//A list of active power ups that the player currently has, with the 0th index being where the shot type is stored
+        TurnOffPowerUPs();//turns off power ups
 
         //removes gameObject after 2 seconds
         Destroy(gameObject, 2);
