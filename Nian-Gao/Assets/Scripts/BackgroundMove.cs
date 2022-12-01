@@ -17,7 +17,7 @@ public class BackgroundMove : MonoBehaviour
     { 
         transform.position -= new Vector3(moveSpeed,0,0);
 
-        if(transform.position.x <= -38){
+        if(transform.position.x <= -30){
             transform.position = new Vector3(38, 0, 0);
         }
     }

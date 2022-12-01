@@ -29,7 +29,7 @@ public class PowerUps : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();//gets the sprite renderer
 

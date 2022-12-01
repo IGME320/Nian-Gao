@@ -274,7 +274,9 @@ public class Enemy : Character
 
         //gets player health for next level
         SwitcherManager.thisManager.playerHealth = player.GetComponent<Player>().getHealth();
-        //get anything else you might want for the next level here
+
+        //Turns off all player power ups so that there is a lean reset
+        player.GetComponent<Player>().TurnOffPowerUPs();
 
         //Goes to win screen
         switchScene.GetComponent<SceneSwitcher>().Win();

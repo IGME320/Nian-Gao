@@ -31,12 +31,21 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.transform.tag == "Border" || collision.transform.tag == "Shield")
+        if(collision.transform.tag == "Border")
         {
             Destroy(self);
         }
+        if(collision.transform.tag == "Shield" && transform.tag != "Bullet")//if an enemy bullet strikes the shield
+        {
+            Destroy(self);
+        }    
         if(collision.transform.tag == "Bullet" || collision.transform.tag == "EnemyBullet")
         {
+            if(transform.tag == "Bullet")//Specifies that only player bullets count toward the collisions
+            {
+                GameObject.Find("Player").GetComponent<Player>().BCol++;//inrements bullet collision tracker
+            }
+            
             Destroy(collision.gameObject);
         }
     }
