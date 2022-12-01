@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Scrolling_Intro.unity
+    guid: 367d0a8a5efc4c2418cb9d196a11aaab
+  - enabled: 1
+    path: Assets/Scenes/Start_Menu.unity
+    guid: 2f932f45749a042479f7349620d21757
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 79420dadc42bcd24b9ded23c432cc15f
+  - enabled: 1
+    path: Assets/Scenes/Restart.unity
+    guid: 513c2f2d5f994164ea8eeebb2af7ad68
+  - enabled: 1
+    path: Assets/Scenes/Win_Restart.unity
+    guid: e9fd593851736fc4284951f54bd07f66
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: 233ac23303079e64d9f5b1918fe3bf3b
+  m_configObjects: {}
