@@ -222,7 +222,7 @@ MonoBehaviour:
   shootDelay: 0.2
   shieldObj: {fileID: 4963281406824409761}
   powerUp: {fileID: 3080621411191511055, guid: dd1583ab20c791c409d60ea1f52be3d1, type: 3}
-  dashSpeed: 20
+  dashSpeed: 10
   startDashTime: 0.05
   isflipped: 0
 --- !u!50 &-5534644205557973371

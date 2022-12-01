@@ -143,9 +143,11 @@ public class Player : Character
             Quaternion emitQuat = Quaternion.identity;//the angle at which the bullet is rotated, if the player is flipped
             if(isflipped == true){
                 emitQuat = Quaternion.Euler(0, 0, 180);//flips the bullet to match player flipping
+                emitPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f, transform.position.z);
             }                
             else if(isflipped == false){
                 emitQuat=  Quaternion.identity;
+                emitPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f, transform.position.z);
             }
             
             //Checks whaty the current shooting power up is, and spawnd bullets and changes delay acordingly
