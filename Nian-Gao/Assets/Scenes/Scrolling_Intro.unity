@@ -254,10 +254,9 @@ MonoBehaviour:
 
     Battle through
     the many reincarnations of Nian, to save the New Year. You will experience intense,
-    high speed, bullet hell action as you dodge and weave through the intreicate
-    array of Nians attacks. Fight back with enticing food power ups that give you
-    the abilities of the other Zodiacs. Can you save the New Year before it is too
-    late?'
+    high speed, bullet hell action as you dodge and weave through the intricate array
+    of Nian''s attacks. Fight back with enticing food power ups that give you the
+    abilities of the other Zodiacs. Can you save the New Year before it is too late?'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
